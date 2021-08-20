@@ -25,9 +25,10 @@ It will eventually be possible to install Suite8080 from PyPi. In the meantime, 
 
 ### Running on Replit
 
-To run the programs online on Replit visit the [Suite8080 REPL](https://replit.com/@PaoloAmoroso/suite8080) with a browser and click `Run`. Then open the Console pane, change to the `suite8080` directory, and execute the following command to run the disassembler:
+To run the programs online on Replit visit the [Suite8080 REPL](https://replit.com/@PaoloAmoroso/suite8080) with a browser, open the Shell pane and edit `~/.bashrc` to add `export PYTHONPATH=.:$PYTHONPATH`. Next, click `Run`. Finally, in the Shell pane change to the `suite8080` directory and execute the following commands to run the disassembler:
 
 ```bash
+$ export PYTHONPATH=.:$PYTHONPATH
 $ python3 -m dis80 file.com
 ```
 
