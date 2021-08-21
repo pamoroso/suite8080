@@ -1,6 +1,10 @@
 # Suite8080
 
-Suite8080 is a suite of Intel 8080 Assembly cross-development tools written in Python. It comprises the following command-line programs:
+Suite8080 is a suite of Intel 8080 Assembly cross-development tools written in Python.
+
+![Disassembler output](suite8080.jpg)
+
+The suite comprises the following command-line programs:
 
 * `dis80`: a disassembler
 * `asm80`: an assembler
