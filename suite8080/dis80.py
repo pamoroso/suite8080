@@ -288,7 +288,7 @@ def disassemble():
         print(f'{address:04x}\t{mnemonic}', end='')
         if size > 1:
             if size == 3:
-                # 16-bit little-endian, so print least significant byte first
+                # 16-bit little-endian, so print most significant byte first
                 print(f'{program[address + 2]:02x}', end='')
             print(f'{program[address + 1]:02x}h', end='')
         print()
