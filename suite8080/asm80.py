@@ -2,6 +2,7 @@
 
 import argparse
 from pathlib import Path
+import sys
 
 
 # Current source line number
@@ -26,6 +27,14 @@ def write_binary_file(filename):
     """Write machine code output to a binary file."""
     with open(filename, 'wb') as file:
         file.write(output)
+
+
+def report_error(message):
+    """Display an error message and exit returning an error code."""
+    global lineno
+
+    print(f'asm80: At line {lineno + 1}: {message}', file=sys.stderr)
+    sys.exit(1)
 
 
 def assemble(lines, outfile):
