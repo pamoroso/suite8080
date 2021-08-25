@@ -100,6 +100,8 @@ def parse(line):
     # isn't ready
     print(f'Label: {label} | Mnemonic: {mnemonic} | Operand1: {operand1} | Operand2: {operand2} | Comment: {comment}')
 
+    return label, mnemonic, operand1, operand2, comment
+
 
 def write_binary_file(filename):
     """Write machine code output to a binary file."""
