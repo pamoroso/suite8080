@@ -5,19 +5,12 @@ import pytest
 from suite8080 import asm80
 
 
-def test_parse_blank_line():
-    """Test that a whitespace-only line generates no tokens."""
-    source_line = '   '
+@pytest.mark.parametrize('source_line, expected', [
     # Label, mnemonic, operand1, operand2, comment
-    expected = ('', '', '', '', '')
-
-    assert asm80.parse(source_line) == expected
-
-
-def test_parse_comment_only():
-    """Test that a comment-only line generates only comment token."""
-    source_line = '  ; Comment only'
-    # Label, mnemonic, operand1, operand2, comment
-    expected = ('', '', '', '', 'Comment only')
-
+    #
+    # Blank line
+    ('   ', ('', '', '', '', '')),
+    ('  ; Comment only', ('', '', '', '', 'Comment only')),
+])
+def test_parse(source_line, expected):
     assert asm80.parse(source_line) == expected
