@@ -96,10 +96,6 @@ def parse(line):
     # first operand may both end up in the first operand, I'm not sure my
     # implementation is affected by the same issue the fixup is supposed to address.
 
-    # Print the tokens while the assembler is under development and code generation
-    # isn't ready
-    print(f'Label: {label} | Mnemonic: {mnemonic} | Operand1: {operand1} | Operand2: {operand2} | Comment: {comment}')
-
     return label, mnemonic, operand1, operand2, comment
 
 
