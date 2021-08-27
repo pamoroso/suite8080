@@ -15,7 +15,7 @@ This hobby programming project is inspired by [a series of blog posts](https://b
 
 The executable files generated and processed by the tools are supposed to run on any Intel 8080 system such as CP/M-80 computers, both actual devices and emulated ones.
 
-Suite8080, which was developed with [Replit](https://replit.com), requires Python 3.6 or later and has no other dependencies.
+Suite8080, which was developed with [Replit](https://replit.com), requires Python 3.6 or later and depends on Pytest for the unit tests.
 
 See the document `design.md` in the source tree for some design notes.
 
@@ -27,27 +27,25 @@ It will eventually be possible to install Suite8080 from PyPi. In the meantime, 
 
 ## Usage
 
-### Running on Replit
+To run the programs online on Replit visit the [Suite8080 REPL](https://replit.com/@PaoloAmoroso/suite8080) with a browser. You first have to set up the environment by forking the REPL, opening the Shell pane, and editing `~/.bashrc` to add `export PYTHONPATH=.:$PYTHONPATH`. Next, click `Run`.
 
-To run the programs online on Replit visit the [Suite8080 REPL](https://replit.com/@PaoloAmoroso/suite8080) with a browser, open the Shell pane and edit `~/.bashrc` to add `export PYTHONPATH=.:$PYTHONPATH`. Next, click `Run`. Finally, in the Shell pane change to the `suite8080` directory and execute the following commands to run the disassembler:
-
+In a Linux shell on Replit or elsewhere, change to the `suite8080/suite8080` directory in the source tree and execute the following command to set up the environment (not necessary on Replit if you already added this to `/.bashrc`):
 ```bash
 $ export PYTHONPATH=.:$PYTHONPATH
-$ python3 -m dis80 file.com
 ```
-
-where `file.com` is an executable Intel 8080 program.
-
-
-### Running elsewhere
-
-Change to the `suite8080` directory in the source tree and execute the following command to run the disassembler:
+Then, to run the disassembler execute:
 
 ```bash
 $ python3 -m dis80 file.com
 ```
 
 where `file.com` is an executable Intel 8080 program.
+
+To run the assembler execute:
+```bash
+$ python3 -m asm80 file.asm
+```
+where `file.asm` is an Intel 8080 Assembly source file.
 
 
 ## Author
