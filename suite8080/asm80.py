@@ -24,6 +24,9 @@ operand1 = ''
 operand2 = ''
 comment = ''
 
+# Symbol table: {'label1': <address1>, 'label2': <address2>, ...}
+symbol_table = {}
+
 
 # A source line has the following syntax:
 #
@@ -99,27 +102,39 @@ def parse(line):
     return label, mnemonic, operand1, operand2, comment
 
 
-def add_symbol():
-    """Add a symbol to the symbol table."""
-    pass
+def add_label():
+    """Add a label to the symbol table."""
+    global symbol_table, address, label
+
+    if label in symbol_table:
+        report_error(f'duplicate label: "{label}"')
+    symbol_table[label] = address
+    print(f'Symbol table: {symbol_table}')
 
 
 def pass_action(instruction_size, output_byte):
-    """Build symbol table in pass 1, generate code in pass 2."""
+    """Build symbol table in pass 1, generate code in pass 2.
+    
+    Parameters
+    ----------
+        instruction_size : int
+            Number of bytes of the instruction
+        output_byte : bytes
+            Opcode, b'' if no output should be generated. 
+    """
     global source_pass, label, mnemonic, address, output
 
     if source_pass == 1:
         # Add new symbol if we have a label
         if label:
-            add_symbol()
+            add_label()
             # Increment address counter by the size of the instruction
             address += instruction_size
         else:
             # Output the byte representing the opcode. For instructions with
             # additional arguments or data we'll output that in a separate function.
-            if output_byte >= 0:
+            if output_byte != b'':
                 output += output_byte
-                print('Output: {output}')
 
 
 # Using a dictionary to similate a switch statement or dispatch on the mnemonic
@@ -131,6 +146,7 @@ def process_instruction():
 
     # Line completely blank or containing only a label and/or comment
     if mnemonic == operand1 == operand2 == '':
+        pass_action(0, b'')
         return
 
     if mnemonic == 'nop':
@@ -139,8 +155,18 @@ def process_instruction():
         report_error(f'unknown mnemonic "{mnemonic}"')
 
 
+def check_operands(valid):
+    "Return True if all operands are present for mnemonic, otherwise report error."
+    if not(valid):
+        report_error(f'invalid operands for mnemonic "{mnemonic}"')
+
+
+# nop: 0x00
 def nop():
-    pass
+    global operand1, operands
+
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\x00')
 
 
 def write_binary_file(filename):
