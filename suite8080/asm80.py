@@ -99,6 +99,50 @@ def parse(line):
     return label, mnemonic, operand1, operand2, comment
 
 
+def add_symbol():
+    """Add a symbol to the symbol table."""
+    pass
+
+
+def pass_action(instruction_size, output_byte):
+    """Build symbol table in pass 1, generate code in pass 2."""
+    global source_pass, label, mnemonic, address, output
+
+    if source_pass == 1:
+        # Add new symbol if we have a label
+        if label:
+            add_symbol()
+            # Increment address counter by the size of the instruction
+            address += instruction_size
+        else:
+            # Output the byte representing the opcode. For instructions with
+            # additional arguments or data we'll output that in a separate function.
+            if output_byte >= 0:
+                output += output_byte
+                print('Output: {output}')
+
+
+# Using a dictionary to similate a switch statement or dispatch on the mnemonic
+# wouldn't save much code or make it more clear, as we need a separate function
+# per mnemonic anyway to check the operands.
+def process_instruction():
+    """Check instruction operands and generate code."""
+    global label, mnemonic, operand1, operand2, comment
+
+    # Line completely blank or containing only a label and/or comment
+    if mnemonic == operand1 == operand2 == '':
+        return
+
+    if mnemonic == 'nop':
+        nop()
+    else:
+        report_error(f'unknown mnemonic "{mnemonic}"')
+
+
+def nop():
+    pass
+
+
 def write_binary_file(filename):
     """Write machine code output to a binary file."""
     with open(filename, 'wb') as file:
@@ -121,10 +165,12 @@ def assemble(lines, outfile):
     source_pass = 1
     for lineno, line in enumerate(lines):
         parse(line)
+        process_instruction()
 
     source_pass = 2
     for lineno, line in enumerate(lines):
         parse(line)
+        process_instruction()
     
     write_binary_file(outfile)
 
