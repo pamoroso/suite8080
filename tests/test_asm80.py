@@ -41,3 +41,42 @@ from suite8080 import asm80
 ])
 def test_parse(source_line, expected):
     assert asm80.parse(source_line) == expected
+
+
+# The tests involving globals should wrap the test code within saving and restoring
+# the globals.
+
+def test_report_error(capsys):
+    with pytest.raises(SystemExit):
+        expected = 'error message'
+        asm80.report_error('error message')
+        captured = capsys.readouterr()
+        assert expected in captured.err
+
+
+def test_add_label_address0():
+    asm80.label = 'label1'
+    asm80.address = 0
+    expected = asm80.address
+    asm80.add_label()
+    assert asm80.symbol_table[asm80.label] == expected
+
+
+def test_add_label_new():
+    asm80.label = 'label2'
+    asm80.address = 10
+    expected = asm80.address
+    asm80.add_label()
+    assert asm80.symbol_table[asm80.label] == expected
+
+
+def test_add_label_duplicate(capsys):
+    asm80.label = 'label3'
+    asm80.address = 10
+    expected = asm80.address
+    with pytest.raises(SystemExit):
+        expected = 'duplicate label'
+        asm80.symbol_table['label3'] = 10
+        asm80.add_label()
+        captured = capsys.readouterr()
+        assert expected in captured.err
