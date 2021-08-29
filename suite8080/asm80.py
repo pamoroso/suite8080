@@ -28,6 +28,29 @@ comment = ''
 symbol_table = {}
 
 
+def assemble(lines, outfile):
+    """Assemble source and write output to a file."""
+    global lineno, source_pass
+
+    source_pass = 1
+    for lineno, line in enumerate(lines):
+        parse(line)
+        process_instruction()
+
+    source_pass = 2
+    for lineno, line in enumerate(lines):
+        parse(line)
+        process_instruction()
+    
+    write_binary_file(outfile)
+
+
+def write_binary_file(filename):
+    """Write machine code output to a binary file."""
+    with open(filename, 'wb') as file:
+        file.write(output)
+
+
 # A source line has the following syntax:
 #
 # [label:] [mnemonic [operand1[, operand2]]] [; comment]
@@ -102,14 +125,31 @@ def parse(line):
     return label, mnemonic, operand1, operand2, comment
 
 
-def add_label():
-    """Add a label to the symbol table."""
-    global symbol_table, address, label
+# Using a dictionary to similate a switch statement or dispatch on the mnemonic
+# wouldn't save much code or make it more clear, as we need a separate function
+# per mnemonic anyway to check the operands.
+def process_instruction():
+    """Check instruction operands and generate code."""
+    global label, mnemonic, operand1, operand2, comment
 
-    if label in symbol_table:
-        report_error(f'duplicate label: "{label}"')
-    symbol_table[label] = address
-    print(f'Symbol table: {symbol_table}')
+    # Line completely blank or containing only a label and/or comment
+    if mnemonic == operand1 == operand2 == '':
+        pass_action(0, b'')
+        return
+
+    if mnemonic == 'nop':
+        nop()
+    else:
+        report_error(f'unknown mnemonic "{mnemonic}"')
+
+
+def report_error(message):
+    """Display an error message and exit returning an error code."""
+    global lineno
+
+    # List indexes start at 0 but humans count lines starting at 1
+    print(f'asm80> line {lineno + 1}: {message}', file=sys.stderr)
+    sys.exit(1)
 
 
 def pass_action(instruction_size, output_byte):
@@ -137,28 +177,13 @@ def pass_action(instruction_size, output_byte):
                 output += output_byte
 
 
-# Using a dictionary to similate a switch statement or dispatch on the mnemonic
-# wouldn't save much code or make it more clear, as we need a separate function
-# per mnemonic anyway to check the operands.
-def process_instruction():
-    """Check instruction operands and generate code."""
-    global label, mnemonic, operand1, operand2, comment
+def add_label():
+    """Add a label to the symbol table."""
+    global symbol_table, address, label
 
-    # Line completely blank or containing only a label and/or comment
-    if mnemonic == operand1 == operand2 == '':
-        pass_action(0, b'')
-        return
-
-    if mnemonic == 'nop':
-        nop()
-    else:
-        report_error(f'unknown mnemonic "{mnemonic}"')
-
-
-def check_operands(valid):
-    "Return True if all operands are present for mnemonic, otherwise report error."
-    if not(valid):
-        report_error(f'invalid operands for mnemonic "{mnemonic}"')
+    if label in symbol_table:
+        report_error(f'duplicate label: "{label}"')
+    symbol_table[label] = address
 
 
 # nop: 0x00
@@ -169,36 +194,10 @@ def nop():
     pass_action(1, b'\x00')
 
 
-def write_binary_file(filename):
-    """Write machine code output to a binary file."""
-    with open(filename, 'wb') as file:
-        file.write(output)
-
-
-def report_error(message):
-    """Display an error message and exit returning an error code."""
-    global lineno
-
-    # List indexes start at 0 but humans count lines starting at 1
-    print(f'asm80> line {lineno + 1}: {message}', file=sys.stderr)
-    sys.exit(1)
-
-
-def assemble(lines, outfile):
-    """Assemble source and write output to a file."""
-    global lineno, source_pass
-
-    source_pass = 1
-    for lineno, line in enumerate(lines):
-        parse(line)
-        process_instruction()
-
-    source_pass = 2
-    for lineno, line in enumerate(lines):
-        parse(line)
-        process_instruction()
-    
-    write_binary_file(outfile)
+def check_operands(valid):
+    "Report error if argument isn't Truthy."
+    if not(valid):
+        report_error(f'invalid operands for mnemonic "{mnemonic}"')
 
 
 def main(infile):
