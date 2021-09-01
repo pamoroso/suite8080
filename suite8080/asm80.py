@@ -139,6 +139,8 @@ def process_instruction():
 
     if mnemonic == 'nop':
         nop()
+    elif mnemonic == 'mov':
+        mov()
     else:
         report_error(f'unknown mnemonic "{mnemonic}"')
 
@@ -170,11 +172,12 @@ def pass_action(instruction_size, output_byte):
             add_label()
             # Increment address counter by the size of the instruction
             address += instruction_size
-        else:
-            # Output the byte representing the opcode. For instructions with
-            # additional arguments or data we'll output that in a separate function.
-            if output_byte != b'':
-                output += output_byte
+
+    else:
+        # Pass 2. Output the byte representing the opcode. For instructions with
+        # additional arguments or data we'll output that in a separate function.
+        if output_byte != b'':
+            output += output_byte
 
 
 def add_label():
@@ -188,10 +191,43 @@ def add_label():
 
 # nop: 0x00
 def nop():
-    global operand1, operands
+    global operand1, operand2
 
     check_operands(operand1 == operand2 == '')
     pass_action(1, b'\x00')
+
+
+# mov: 0x40 + (8-bit first register offset << 3) + (8-bit second register offsett)
+# mov m, m: 0x76 (hlt)
+def mov():
+    global operand1, operand2
+
+    check_operands(operand1 != '' and operand2 != '')
+    # 0x40 = 64
+    opcode = 64 + (register_offset8(operand1) << 3) + register_offset8(operand2)
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+def register_offset8(register):
+    """Return 8-bit encoding of register."""
+    if register == 'b':
+        return 0
+    elif register == 'c':
+        return 1
+    elif register == 'd':
+        return 2
+    elif register == 'e':
+        return 3
+    elif register == 'h':
+        return 4
+    elif register == 'l':
+        return 5
+    elif register == 'm':
+        return 6
+    elif register == 'a':
+        return 7
+    else:
+        report_error(f'invalid register "{register}"')
 
 
 def check_operands(valid):
