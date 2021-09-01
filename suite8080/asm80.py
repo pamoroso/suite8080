@@ -143,6 +143,22 @@ def process_instruction():
         mov()
     elif mnemonic == 'hlt':
         hlt()
+    elif mnemonic == 'add':
+        add()
+    elif mnemonic == 'adc':
+        adc()
+    elif mnemonic == 'sub':
+        sub()
+    elif mnemonic == 'sbb':
+        sbb()
+    elif mnemonic == 'ana':
+        ana()
+    elif mnemonic == 'xra':
+        xra()
+    elif mnemonic == 'ora':
+        ora()
+    elif mnemonic == 'cmp':
+        cmp()
     else:
         report_error(f'unknown mnemonic "{mnemonic}"')
 
@@ -199,7 +215,7 @@ def nop():
     pass_action(1, b'\x00')
 
 
-# mov: 0x40 + (8-bit first register offset << 3) + (8-bit second register offsett)
+# mov: 0x40 + (8-bit first register offset << 3) + (8-bit second register offset)
 # mov m, m: 0x76 (hlt)
 def mov():
     global operand1, operand2
@@ -216,6 +232,86 @@ def hlt():
 
     check_operands(operand1 == operand2 == '')
     pass_action(1, b'\x76')
+
+
+# add: 0x80 + 8-bit register offset
+def add():
+    global operand1, operand2
+
+    check_operands(operand1 != '' and operand2 == '')
+    # 0x80 = 128
+    opcode = 128 + register_offset8(operand1)
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# adc: 0x88 + 8-bit register offset
+def adc():
+    global operand1, operand2
+
+    check_operands(operand1 != '' and operand2 == '')
+    # 0x88 = 136
+    opcode = 136 + register_offset8(operand1)
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# sub: 0x90 + 8-bit register offset
+def sub():
+    global operand1, operand2
+
+    check_operands(operand1 != '' and operand2 == '')
+    # 0x90 = 144
+    opcode = 144 + register_offset8(operand1)
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# sbb: 0x98 + 8-bit register offset
+def sbb():
+    global operand1, operand2
+
+    check_operands(operand1 != '' and operand2 == '')
+    # 0x98 = 152
+    opcode = 152 + register_offset8(operand1)
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# ana: 0xa0 + 8-bit register offset
+def ana():
+    global operand1, operand2
+
+    check_operands(operand1 != '' and operand2 == '')
+    # 0xa0 = 160
+    opcode = 160 + register_offset8(operand1)
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# xra: 0xa8 + 8-bit register offset
+def xra():
+    global operand1, operand2
+
+    check_operands(operand1 != '' and operand2 == '')
+    # 0xa8 = 168
+    opcode = 168 + register_offset8(operand1)
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# ora: 0xb0 + 8-bit register offset
+def ora():
+    global operand1, operand2
+
+    check_operands(operand1 != '' and operand2 == '')
+    # 0xb0 = 176
+    opcode = 176 + register_offset8(operand1)
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# cmp: 0xb8 + 8-bit register offset
+def cmp():
+    global operand1, operand2
+
+    check_operands(operand1 != '' and operand2 == '')
+    # 0xb8 = 184
+    opcode = 184 + register_offset8(operand1)
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
 
 
 def register_offset8(register):
