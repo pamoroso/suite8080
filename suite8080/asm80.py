@@ -141,6 +141,8 @@ def process_instruction():
         nop()
     elif mnemonic == 'mov':
         mov()
+    elif mnemonic == 'hlt':
+        hlt()
     else:
         report_error(f'unknown mnemonic "{mnemonic}"')
 
@@ -206,6 +208,14 @@ def mov():
     # 0x40 = 64
     opcode = 64 + (register_offset8(operand1) << 3) + register_offset8(operand2)
     pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# hlt: 0x76
+def hlt():
+    global operand1, operand2
+
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\x76')
 
 
 def register_offset8(register):
