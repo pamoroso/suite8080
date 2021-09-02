@@ -159,6 +159,10 @@ def process_instruction():
         ora()
     elif mnemonic == 'cmp':
         cmp()
+    elif mnemonic == 'pop':
+        pop()
+    elif mnemonic == 'push':
+        push()
     elif mnemonic == 'adi':
         adi()
     elif mnemonic == 'aci':
@@ -315,6 +319,22 @@ def cmp():
     pass_action(1, opcode.to_bytes(1, byteorder='little'))
 
 
+# pop: 0xc1 + 16-bit register offset
+def pop():
+    check_operands(operand1 != '' and operand2 == '')
+    # 0xc1 = 193
+    opcode = 193 + register_offset16()
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# push: 0xc5 + 16-bit register offset
+def push():
+    check_operands(operand1 != '' and operand2 == '')
+    # 0xc5 = 197
+    opcode = 197 + register_offset16()
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
 # adi: 0xc6
 def adi():
     check_operands(operand1 != '' and operand2 == '')
@@ -396,7 +416,7 @@ def cpi():
 
 
 def register_offset8(register):
-    """Return 8-bit encoding of register."""
+    """Return encoding of 8-bit register."""
     if register == 'b':
         return 0
     elif register == 'c':
@@ -415,6 +435,20 @@ def register_offset8(register):
         return 7
     else:
         report_error(f'invalid register "{register}"')
+
+
+def register_offset16():
+    """Return encoding of 16-bit register pair."""
+    if operand1 == 'b':
+        return 0  # 0x00
+    elif operand1 == 'd':
+        return 16  # 0x10
+    elif operand1 == 'h':
+        return 32  # 0x20
+    elif operand1 == 'psw':
+        return 48  # 0x30
+    else:
+        report_error(f'invalid register "{operand1}" for instruction "{mnemonic}"')
 
 
 def check_operands(valid):
