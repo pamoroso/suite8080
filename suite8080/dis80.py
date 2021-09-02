@@ -276,8 +276,6 @@ program = b''
 
 
 def disassemble():
-    global instructions
-    global program
     address = 0
 
     while address < len(program):

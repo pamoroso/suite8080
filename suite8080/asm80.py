@@ -30,7 +30,7 @@ symbol_table = {}
 
 def assemble(lines, outfile):
     """Assemble source and write output to a file."""
-    global lineno, source_pass
+    global source_pass
 
     source_pass = 1
     for lineno, line in enumerate(lines):
@@ -165,7 +165,6 @@ def process_instruction():
 
 def report_error(message):
     """Display an error message and exit returning an error code."""
-    global lineno
 
     # List indexes start at 0 but humans count lines starting at 1
     print(f'asm80> line {lineno + 1}: {message}', file=sys.stderr)
@@ -182,7 +181,7 @@ def pass_action(instruction_size, output_byte):
         output_byte : bytes
             Opcode, b'' if no output should be generated. 
     """
-    global source_pass, label, mnemonic, address, output
+    global address, output
 
     if source_pass == 1:
         # Add new symbol if we have a label
@@ -200,7 +199,7 @@ def pass_action(instruction_size, output_byte):
 
 def add_label():
     """Add a label to the symbol table."""
-    global symbol_table, address, label
+    global symbol_table
 
     if label in symbol_table:
         report_error(f'duplicate label: "{label}"')
@@ -209,8 +208,6 @@ def add_label():
 
 # nop: 0x00
 def nop():
-    global operand1, operand2
-
     check_operands(operand1 == operand2 == '')
     pass_action(1, b'\x00')
 
@@ -218,8 +215,6 @@ def nop():
 # mov: 0x40 + (8-bit first register offset << 3) + (8-bit second register offset)
 # mov m, m: 0x76 (hlt)
 def mov():
-    global operand1, operand2
-
     check_operands(operand1 != '' and operand2 != '')
     # 0x40 = 64
     opcode = 64 + (register_offset8(operand1) << 3) + register_offset8(operand2)
@@ -228,16 +223,12 @@ def mov():
 
 # hlt: 0x76
 def hlt():
-    global operand1, operand2
-
     check_operands(operand1 == operand2 == '')
     pass_action(1, b'\x76')
 
 
 # add: 0x80 + 8-bit register offset
 def add():
-    global operand1, operand2
-
     check_operands(operand1 != '' and operand2 == '')
     # 0x80 = 128
     opcode = 128 + register_offset8(operand1)
@@ -246,8 +237,6 @@ def add():
 
 # adc: 0x88 + 8-bit register offset
 def adc():
-    global operand1, operand2
-
     check_operands(operand1 != '' and operand2 == '')
     # 0x88 = 136
     opcode = 136 + register_offset8(operand1)
@@ -256,8 +245,6 @@ def adc():
 
 # sub: 0x90 + 8-bit register offset
 def sub():
-    global operand1, operand2
-
     check_operands(operand1 != '' and operand2 == '')
     # 0x90 = 144
     opcode = 144 + register_offset8(operand1)
@@ -266,8 +253,6 @@ def sub():
 
 # sbb: 0x98 + 8-bit register offset
 def sbb():
-    global operand1, operand2
-
     check_operands(operand1 != '' and operand2 == '')
     # 0x98 = 152
     opcode = 152 + register_offset8(operand1)
@@ -276,8 +261,6 @@ def sbb():
 
 # ana: 0xa0 + 8-bit register offset
 def ana():
-    global operand1, operand2
-
     check_operands(operand1 != '' and operand2 == '')
     # 0xa0 = 160
     opcode = 160 + register_offset8(operand1)
@@ -286,8 +269,6 @@ def ana():
 
 # xra: 0xa8 + 8-bit register offset
 def xra():
-    global operand1, operand2
-
     check_operands(operand1 != '' and operand2 == '')
     # 0xa8 = 168
     opcode = 168 + register_offset8(operand1)
@@ -296,8 +277,6 @@ def xra():
 
 # ora: 0xb0 + 8-bit register offset
 def ora():
-    global operand1, operand2
-
     check_operands(operand1 != '' and operand2 == '')
     # 0xb0 = 176
     opcode = 176 + register_offset8(operand1)
@@ -306,8 +285,6 @@ def ora():
 
 # cmp: 0xb8 + 8-bit register offset
 def cmp():
-    global operand1, operand2
-
     check_operands(operand1 != '' and operand2 == '')
     # 0xb8 = 184
     opcode = 184 + register_offset8(operand1)
