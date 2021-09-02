@@ -159,6 +159,22 @@ def process_instruction():
         ora()
     elif mnemonic == 'cmp':
         cmp()
+    elif mnemonic == 'adi':
+        adi()
+    elif mnemonic == 'aci':
+        aci()
+    elif mnemonic == 'sui':
+        sui()
+    elif mnemonic == 'sbi':
+        sbi()
+    elif mnemonic == 'ani':
+        ani()
+    elif mnemonic == 'xri':
+        xri()
+    elif mnemonic == 'ori':
+        ori()
+    elif mnemonic == 'cpi':
+        cpi()
     else:
         report_error(f'unknown mnemonic "{mnemonic}"')
 
@@ -289,6 +305,62 @@ def cmp():
     # 0xb8 = 184
     opcode = 184 + register_offset8(operand1)
     pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# adi: 0xc6
+def adi():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(2, b'\xc6')
+    immediate_operand()
+
+
+# aci: 0xce
+def aci():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(2, b'\xce')
+    immediate_operand()
+
+
+# sui: 0xd6
+def sui():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(2, b'\xd6')
+    immediate_operand()
+
+
+# sbi: 0xde
+def sbi():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(2, b'\xde')
+    immediate_operand()
+
+
+# ani: 0xe6
+def ani():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(2, b'\xe6')
+    immediate_operand()
+
+
+# xri: 0xee
+def xri():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(2, b'\xee')
+    immediate_operand()
+
+
+# ori: 0xf6
+def ori():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(2, b'\xf6')
+    immediate_operand()
+
+
+# cpi: 0xfe
+def cpi():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(2, b'\xfe')
+    immediate_operand()
 
 
 def register_offset8(register):
