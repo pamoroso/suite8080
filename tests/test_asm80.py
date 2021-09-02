@@ -130,3 +130,23 @@ def test_register_offset8_missing_register(capsys):
         asm80.mov()
         captured = capsys.readouterr()
         assert expected in captured.err
+
+
+@pytest.mark.skip(reason='bug')
+@mock.patch('suite8080.asm80.operand1', '12')
+@mock.patch('suite8080.asm80.output', b'')
+def test_immediate_operand_decimal():
+    expected = b'\x0c'
+    asm80.immediate_operand()
+    assert asm80.output == expected
+
+
+@pytest.mark.parametrize('input, number', [
+    ('123', 123),
+    ('123h', 291),
+    ('02h', 2),
+    ('02', 2),
+    ('0ah', 10),
+])
+def test_get_number(input, number):
+    assert asm80.get_number(input) == number

@@ -319,6 +319,30 @@ def check_operands(valid):
         report_error(f'invalid operands for mnemonic "{mnemonic}"')
 
 
+def immediate_operand():
+    """Generate code for an 8-bit immediate operand."""
+    global output
+
+    if operand1[0].isdigit():
+        number = get_number(operand1)
+    elif source_pass == 2:
+        number = symbol_table.get(operand1, False)
+        if not(number):
+            report_error(f'undefined label "{operand1}"')
+
+    if source_pass == 2:
+        output += number.to_bytes(1, byteorder='little')
+
+
+def get_number(input):
+    """Return value of hex or decimal numeric input string."""
+    if input.endswith('h'):
+        number = int(input[:-1], 16)
+    else:
+        number = int(input)
+    return number
+
+
 def main(infile):
     """Parse the command line and pass the input file to the assembler."""
     with open(infile, 'r') as file:
