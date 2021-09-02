@@ -167,12 +167,20 @@ def process_instruction():
         sui()
     elif mnemonic == 'sbi':
         sbi()
+    elif mnemonic == 'xthl':
+        xthl()
     elif mnemonic == 'ani':
         ani()
+    elif mnemonic == 'pchl':
+        pchl()
+    elif mnemonic == 'xchg':
+        xchg()
     elif mnemonic == 'xri':
         xri()
     elif mnemonic == 'ori':
         ori()
+    elif mnemonic == 'sphl':
+        sphl()
     elif mnemonic == 'cpi':
         cpi()
     else:
@@ -335,11 +343,29 @@ def sbi():
     immediate_operand()
 
 
+# xthl: 0xe3
+def xthl():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xe3')
+
+
 # ani: 0xe6
 def ani():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xe6')
     immediate_operand()
+
+
+# pchl: 0xe9
+def pchl():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xe9')
+
+
+# xchg: 0xeb
+def xchg():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xeb')
 
 
 # xri: 0xee
@@ -354,6 +380,12 @@ def ori():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xf6')
     immediate_operand()
+
+
+# sphl: 0xf9
+def sphl():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xf9')
 
 
 # cpi: 0xfe
