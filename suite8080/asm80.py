@@ -173,6 +173,8 @@ def process_instruction():
         push()
     elif mnemonic == 'adi':
         adi()
+    elif mnemonic == 'rst':
+        rst()
     elif mnemonic == 'rz':
         rz()
     elif mnemonic == 'ret':
@@ -191,7 +193,7 @@ def process_instruction():
         jnc()
     elif mnemonic == 'out':
         i80_out()
-    if mnemonic == 'cnc':
+    elif mnemonic == 'cnc':
         cnc()
     elif mnemonic == 'sui':
         sui()
@@ -429,6 +431,18 @@ def adi():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xc6')
     immediate_operand()
+
+
+# rst: 0xc7 + (8 * restart vector number)
+def rst():
+    check_operands(operand1 != '' and operand2 == '')
+    offset = int(operand1, 10)
+    if 0 <= offset <= 7:
+        # 0xc7 = 199
+        opcode = 199 + (offset << 3)
+        pass_action(1, opcode.to_bytes(1, byteorder='little'))
+    else:
+        report_error(f'invalid restart vector "{operand1}"')
 
 
 # rz: 0xc8
