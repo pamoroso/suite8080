@@ -159,40 +159,94 @@ def process_instruction():
         ora()
     elif mnemonic == 'cmp':
         cmp()
+    elif mnemonic == 'rnz':
+        rnz()
     elif mnemonic == 'pop':
         pop()
+    elif mnemonic == 'jnz':
+        jnz()
+    elif mnemonic == 'jmp':
+        jmp()
+    elif mnemonic == 'cnz':
+        cnz()
     elif mnemonic == 'push':
         push()
     elif mnemonic == 'adi':
         adi()
+    elif mnemonic == 'rz':
+        rz()
+    elif mnemonic == 'ret':
+        ret()
+    elif mnemonic == 'jz':
+        jz()
+    elif mnemonic == 'cz':
+        cz()
+    elif mnemonic == 'call':
+        call()
     elif mnemonic == 'aci':
         aci()
+    elif mnemonic == 'rnc':
+        rnc()
+    elif mnemonic == 'jnc':
+        jnc()
     elif mnemonic == 'out':
         i80_out()
+    if mnemonic == 'cnc':
+        cnc()
     elif mnemonic == 'sui':
         sui()
+    elif mnemonic == 'rc':
+        rc()
+    elif mnemonic == 'jc':
+        jc()
     elif mnemonic == 'in':
         i80_in()
+    elif mnemonic == 'cc':
+        cc()
     elif mnemonic == 'sbi':
         sbi()
+    elif mnemonic == 'jpe':
+        jpe()
+    elif mnemonic == 'rpo':
+        rpo()
+    elif mnemonic == 'jpo':
+        jpo()
     elif mnemonic == 'xthl':
         xthl()
+    elif mnemonic == 'cpo':
+        cpo()
     elif mnemonic == 'ani':
         ani()
+    elif mnemonic == 'rpe':
+        rpe()
     elif mnemonic == 'pchl':
         pchl()
     elif mnemonic == 'xchg':
         xchg()
+    elif mnemonic == 'cpe':
+        cpe()
     elif mnemonic == 'xri':
         xri()
+    elif mnemonic == 'rp':
+        rp()
+    elif mnemonic == 'jp':
+        jp()
     elif mnemonic == 'di':
         di()
+    elif mnemonic == 'cp':
+        cp()
     elif mnemonic == 'ori':
         ori()
+    elif mnemonic == 'rm':
+        rm()
     elif mnemonic == 'sphl':
         sphl()
+    elif mnemonic == 'jm':
+        jm()
     elif mnemonic == 'ei':
         ei()
+    elif mnemonic == 'cm':
+        cm()
     elif mnemonic == 'cpi':
         cpi()
     else:
@@ -327,12 +381,39 @@ def cmp():
     pass_action(1, opcode.to_bytes(1, byteorder='little'))
 
 
+# rnz: 0xc0
+def rnz():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xc0')
+
+
 # pop: 0xc1 + 16-bit register offset
 def pop():
     check_operands(operand1 != '' and operand2 == '')
     # 0xc1 = 193
     opcode = 193 + register_offset16()
     pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# jnz: 0xc2
+def jnz():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xc2')
+    address16()
+
+
+# jmp: 0xc3
+def jmp():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xc3')
+    address16()
+
+
+# cnz: 0xc4
+def cnz():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xc4')
+    address16()
 
 
 # push: 0xc5 + 16-bit register offset
@@ -350,11 +431,57 @@ def adi():
     immediate_operand()
 
 
+# rz: 0xc8
+def rz():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xc8')
+
+
+# ret: 0xc9
+def ret():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xc9')
+
+
+# jz: 0xca
+def jz():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xca')
+    address16()
+
+
+# cz: 0xcc
+def cz():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xcc')
+    address16()
+
+
+# call: 0xcd
+def call():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xcd')
+    address16()
+
+
 # aci: 0xce
 def aci():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xce')
     immediate_operand()
+
+
+# rnc: 0xd0
+def rnc():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xd0')
+
+
+# jnc: 0xd2
+def jnc():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xd2')
+    address16()
 
 
 # out: 0xd3
@@ -364,11 +491,31 @@ def i80_out():
     immediate_operand()
 
 
+# cnc: 0xd4
+def cnc():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xd4')
+    address16()
+
+
 # sui: 0xd6
 def sui():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xd6')
     immediate_operand()
+
+
+# rc: 0xd8
+def rc():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xd8')
+
+
+# jc: 0xda
+def jc():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xda')
+    address16()
 
 
 # in: 0xdb
@@ -378,11 +525,38 @@ def i80_in():
     immediate_operand()
 
 
+# cc: 0xdc
+def cc():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xdc')
+    address16()
+
+
 # sbi: 0xde
 def sbi():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xde')
     immediate_operand()
+
+
+# jpe: 0xea
+def jpe():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xea')
+    address16()
+
+
+# rpo: 0xe0
+def rpo():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xe0')
+
+
+# jpo: 0xe2
+def jpo():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xe2')
+    address16()
 
 
 # xthl: 0xe3
@@ -391,11 +565,24 @@ def xthl():
     pass_action(1, b'\xe3')
 
 
+# cpo: 0xe4
+def cpo():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xe4')
+    address16()
+
+
 # ani: 0xe6
 def ani():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xe6')
     immediate_operand()
+
+
+# rpe: 0xe8
+def rpe():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xe8')
 
 
 # pchl: 0xe9
@@ -410,6 +597,13 @@ def xchg():
     pass_action(1, b'\xeb')
 
 
+# cpe: 0xec
+def cpe():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xec')
+    address16()
+
+
 # xri: 0xee
 def xri():
     check_operands(operand1 != '' and operand2 == '')
@@ -417,10 +611,30 @@ def xri():
     immediate_operand()
 
 
+# rp: 0xf0
+def rp():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xf0')
+
+
+# jp: 0xf2
+def jp():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xf2')
+    address16()
+
+
 # di: 0xf3
 def di():
     check_operands(operand1 == operand2 == '')
     pass_action(1, b'\xf3')
+
+
+# cp: 0xf4
+def cp():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xf4')
+    address16()
 
 
 # ori: 0xf6
@@ -430,16 +644,36 @@ def ori():
     immediate_operand()
 
 
+# rm: 0xf8
+def rm():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\xf8')
+
+
 # sphl: 0xf9
 def sphl():
     check_operands(operand1 == operand2 == '')
     pass_action(1, b'\xf9')
 
 
+# jm: 0xfa
+def jm():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xfa')
+    address16()
+
+
 # ei: 0xfb
 def ei():
     check_operands(operand1 == operand2 == '')
     pass_action(1, b'\xfb')
+
+
+# cm: 0xfc
+def cm():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\xfc')
+    address16()
 
 
 # cpi: 0xfe
@@ -491,6 +725,7 @@ def check_operands(valid):
         report_error(f'invalid operands for mnemonic "{mnemonic}"')
 
 
+# BUG: doesn't work for operands <= 0
 def immediate_operand():
     """Generate code for an 8-bit immediate operand."""
     global output
@@ -504,6 +739,22 @@ def immediate_operand():
 
     if source_pass == 2:
         output += number.to_bytes(1, byteorder='little')
+
+
+# BUG: doesn't work with immediate addresses like ffh or 0000h
+def address16():
+    """Generate code for 16-bit addresses."""
+    global output
+
+    if operand1[0].isdigit():
+        number = get_number(operand1)
+    else:
+        number = symbol_table.get(operand1, False)
+        if source_pass == 2 and not(number):
+            report_error(f'undefined label "{operand1}"')
+
+    if source_pass == 2:
+        output += number.to_bytes(2, byteorder='little')
 
 
 def get_number(input):
