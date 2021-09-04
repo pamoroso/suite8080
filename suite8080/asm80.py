@@ -755,7 +755,8 @@ def immediate_operand():
         output += number.to_bytes(1, byteorder='little')
 
 
-# BUG: doesn't work with immediate addresses like ffh or 0000h
+# BUG: doesn't work with immediate addresses like ffh; labels aren't added to
+# symbol table as pass 1 isn't handled
 def address16():
     """Generate code for 16-bit addresses."""
     global output
@@ -763,8 +764,8 @@ def address16():
     if operand1[0].isdigit():
         number = get_number(operand1)
     else:
-        number = symbol_table.get(operand1, False)
-        if source_pass == 2 and not(number):
+        number = symbol_table.get(operand1, -1)
+        if source_pass == 2 and number < 0:
             report_error(f'undefined label "{operand1}"')
 
     if source_pass == 2:
