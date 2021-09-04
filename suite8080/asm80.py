@@ -280,8 +280,7 @@ def pass_action(instruction_size, output_byte):
         if label:
             add_label()
             # Increment address counter by the size of the instruction
-            address += instruction_size
-
+        address += instruction_size
     else:
         # Pass 2. Output the byte representing the opcode. For instructions with
         # additional arguments or data we'll output that in a separate function.
@@ -764,6 +763,8 @@ def address16():
     if operand1[0].isdigit():
         number = get_number(operand1)
     else:
+        # Valid addresses are non-negative, so a negative address is an appropriate
+        # default for a label not in the symbol table.
         number = symbol_table.get(operand1, -1)
         if source_pass == 2 and number < 0:
             report_error(f'undefined label "{operand1}"')
