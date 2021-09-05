@@ -791,7 +791,15 @@ def register_offset16():
     elif operand1 == 'h':
         return 32  # 0x20
     elif operand1 == 'psw':
-        return 48  # 0x30
+        if (mnemonic == 'push' or mnemonic == 'pop'):
+            return 48  # 0x30
+        else:
+            report_error(f'"psw" can not be used with instruction "{mnemonic}"')
+    elif operand1 == 'sp':
+        if (mnemonic != 'push' and mnemonic != 'pop'):
+            return 48  # 0x30
+        else:
+            report_error(f'"sp" can not be used with instruction "{mnemonic}"')
     else:
         report_error(f'invalid register "{operand1}" for instruction "{mnemonic}"')
 
