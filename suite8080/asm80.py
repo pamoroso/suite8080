@@ -139,6 +139,22 @@ def process_instruction():
 
     if mnemonic == 'nop':
         nop()
+    elif mnemonic == 'rlc':
+        rlc()
+    elif mnemonic == 'rrc':
+        rrc()
+    elif mnemonic == 'ral':
+        ral()
+    elif mnemonic == 'rar':
+        rar()
+    elif mnemonic == 'daa':
+        daa()
+    elif mnemonic == 'cma':
+        cma()
+    elif mnemonic == 'stc':
+        stc()
+    elif mnemonic == 'cmc':
+        cmc()
     elif mnemonic == 'mov':
         mov()
     elif mnemonic == 'hlt':
@@ -301,6 +317,54 @@ def add_label():
 def nop():
     check_operands(operand1 == operand2 == '')
     pass_action(1, b'\x00')
+
+
+# rlc: 0x07
+def rlc():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\x07')
+
+
+# rrc: 0x0f
+def rrc():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\x0f')
+
+
+# ral: 0x17
+def ral():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\x17')
+
+
+# rar: 0x1f
+def rar():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\x1f')
+
+
+# daa: 0x27
+def daa():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\x27')
+
+
+# cma: 0x2f
+def cma():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\x2f')
+
+
+# stc: 0x37
+def stc():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\x37')
+
+
+# cmc: 0x3f
+def cmc():
+    check_operands(operand1 == operand2 == '')
+    pass_action(1, b'\x3f')
 
 
 # mov: 0x40 + (8-bit first register offset << 3) + (8-bit second register offset)
