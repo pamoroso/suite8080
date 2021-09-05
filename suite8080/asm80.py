@@ -139,6 +139,8 @@ def process_instruction():
 
     if mnemonic == 'nop':
         nop()
+    elif mnemonic == 'stax':
+        stax()
     elif mnemonic == 'inx':
         inx()
     elif mnemonic == 'inr':
@@ -149,6 +151,8 @@ def process_instruction():
         rlc()
     elif mnemonic == 'dad':
         dad()
+    elif mnemonic == 'ldax':
+        ldax()
     elif mnemonic == 'dcx':
         dcx()
     elif mnemonic == 'rrc':
@@ -157,12 +161,20 @@ def process_instruction():
         ral()
     elif mnemonic == 'rar':
         rar()
+    elif mnemonic == 'shld':
+        shld()
     elif mnemonic == 'daa':
         daa()
+    elif mnemonic == 'lhld':
+        lhld()
     elif mnemonic == 'cma':
         cma()
+    elif mnemonic == 'sta':
+        sta()
     elif mnemonic == 'stc':
         stc()
+    elif mnemonic == 'lda':
+        lda()
     elif mnemonic == 'cmc':
         cmc()
     elif mnemonic == 'mov':
@@ -329,6 +341,19 @@ def nop():
     pass_action(1, b'\x00')
 
 
+# We add a special case here rather than changing register_offset16() for just
+# 2 instructions, stax and ldax.
+# stax: 0x02 + 16-bit register offset
+def stax():
+    check_operands(operand1 != '' and operand2 == '')
+    if operand1 == 'b':
+        pass_action(1, b'\x02')
+    elif operand1 == 'd':
+        pass_action(1, b'\x12')
+    else:
+        report_error(f'"stax" only takes "b" or "d", not "{operand1}"')
+
+
 # inx: 0x03
 def inx():
     check_operands(operand1 != '' and operand2 == '')
@@ -369,6 +394,19 @@ def dad():
     pass_action(1, opcode.to_bytes(1, byteorder='little'))
 
 
+# We add a special case here rather than changing register_offset16() for just
+# 2 instructions, stax and ldax.
+# ldax: 0x0a + 16-bit register offset
+def ldax():
+    check_operands(operand1 != '' and operand2 == '')
+    if operand1 == 'b':
+        pass_action(1, b'\x0a')
+    elif operand1 == 'd':
+        pass_action(1, b'\x1a')
+    else:
+        report_error(f'"ldax" only takes "b" or "d", not "{operand1}"')
+
+
 # dcx: 0x0b
 def dcx():
     check_operands(operand1 != '' and operand2 == '')
@@ -395,10 +433,24 @@ def rar():
     pass_action(1, b'\x1f')
 
 
+# shld: 0x22
+def shld():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\x22')
+    address16()
+
+
 # daa: 0x27
 def daa():
     check_operands(operand1 == operand2 == '')
     pass_action(1, b'\x27')
+
+
+# lhld: 0x2a
+def lhld():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\x2a')
+    address16()
 
 
 # cma: 0x2f
@@ -407,10 +459,24 @@ def cma():
     pass_action(1, b'\x2f')
 
 
+# sta: 0x32
+def sta():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\x32')
+    address16()
+
+
 # stc: 0x37
 def stc():
     check_operands(operand1 == operand2 == '')
     pass_action(1, b'\x37')
+
+
+# lda: 0x3a
+def lda():
+    check_operands(operand1 != '' and operand2 == '')
+    pass_action(3, b'\x3a')
+    address16()
 
 
 # cmc: 0x3f
