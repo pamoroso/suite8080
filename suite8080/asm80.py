@@ -139,8 +139,18 @@ def process_instruction():
 
     if mnemonic == 'nop':
         nop()
+    elif mnemonic == 'inx':
+        inx()
+    elif mnemonic == 'inr':
+        inr()
+    elif mnemonic == 'dcr':
+        dcr()
     elif mnemonic == 'rlc':
         rlc()
+    elif mnemonic == 'dad':
+        dad()
+    elif mnemonic == 'dcx':
+        dcx()
     elif mnemonic == 'rrc':
         rrc()
     elif mnemonic == 'ral':
@@ -319,10 +329,52 @@ def nop():
     pass_action(1, b'\x00')
 
 
+# inx: 0x03
+def inx():
+    check_operands(operand1 != '' and operand2 == '')
+    # 0x03 = 3
+    opcode = 3 + register_offset16()
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# inr: 0x04
+def inr():
+    check_operands(operand1 != '' and operand2 == '')
+    # 0x04 = 4
+    opcode = 4 + (register_offset8(operand1) << 3)
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# dcr: 0x05
+def dcr():
+    check_operands(operand1 != '' and operand2 == '')
+    # 0x05 = 5
+    opcode = 5 + (register_offset8(operand1) << 3)
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
 # rlc: 0x07
 def rlc():
     check_operands(operand1 == operand2 == '')
     pass_action(1, b'\x07')
+
+
+# Is `dad b` a valid instruction? asm80 handles it and dis80 disassembles it as
+# just `dad` but I'm not sure `dad b` is legal.
+# dad: 0x09
+def dad():
+    check_operands(operand1 != '' and operand2 == '')
+    # 0x09 = 9
+    opcode = 9 + register_offset16()
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# dcx: 0x0b
+def dcx():
+    check_operands(operand1 != '' and operand2 == '')
+    # 0x0b = 11
+    opcode = 11 + register_offset16()
+    pass_action(1, opcode.to_bytes(1, byteorder='little'))
 
 
 # rrc: 0x0f
