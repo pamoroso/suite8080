@@ -928,17 +928,21 @@ def check_operands(valid):
         report_error(f'invalid operands for mnemonic "{mnemonic}"')
 
 
-# BUG: doesn't work for operands <= 0
+# Should it work with negative operands?
 def immediate_operand():
     """Generate code for an 8-bit immediate operand."""
     global output
 
     if operand1[0].isdigit():
         number = get_number(operand1)
+    # The operand is a label.
     elif source_pass == 2:
-        number = symbol_table.get(operand1, False)
-        if not(number):
+        # Testing for membership seems clearer than using .get() with a default
+        # (which complicates parsing valid numeric literals) and accepts also an
+        # operand = 0.
+        if operand1 not in symbol_table:
             report_error(f'undefined label "{operand1}"')
+        number = symbol_table[operand1]
 
     if source_pass == 2:
         output += number.to_bytes(1, byteorder='little')
