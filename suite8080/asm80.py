@@ -28,7 +28,7 @@ comment = ''
 symbol_table = {}
 
 
-# Immediate operand type, 8-bit or 16-bit.
+# Immediate operand type, 8-bit or 16-bit. An enum would be overkill and verbose.
 IMMEDIATE8=8
 IMMEDIATE16=16
 
@@ -616,7 +616,7 @@ def push():
 def adi():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xc6')
-    immediate_operand(IMMEDIATE8)
+    immediate_operand()
 
 
 # rst: 0xc7 + (8 * restart vector number)
@@ -668,7 +668,7 @@ def call():
 def aci():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xce')
-    immediate_operand(IMMEDIATE8)
+    immediate_operand()
 
 
 # rnc: 0xd0
@@ -688,7 +688,7 @@ def jnc():
 def i80_out():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xd3')
-    immediate_operand(IMMEDIATE8)
+    immediate_operand()
 
 
 # cnc: 0xd4
@@ -702,7 +702,7 @@ def cnc():
 def sui():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xd6')
-    immediate_operand(IMMEDIATE8)
+    immediate_operand()
 
 
 # rc: 0xd8
@@ -722,7 +722,7 @@ def jc():
 def i80_in():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xdb')
-    immediate_operand(IMMEDIATE8)
+    immediate_operand()
 
 
 # cc: 0xdc
@@ -736,7 +736,7 @@ def cc():
 def sbi():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xde')
-    immediate_operand(IMMEDIATE8)
+    immediate_operand()
 
 
 # jpe: 0xea
@@ -776,7 +776,7 @@ def cpo():
 def ani():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xe6')
-    immediate_operand(IMMEDIATE8)
+    immediate_operand()
 
 
 # rpe: 0xe8
@@ -808,7 +808,7 @@ def cpe():
 def xri():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xee')
-    immediate_operand(IMMEDIATE8)
+    immediate_operand()
 
 
 # rp: 0xf0
@@ -841,7 +841,7 @@ def cp():
 def ori():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xf6')
-    immediate_operand(IMMEDIATE8)
+    immediate_operand()
 
 
 # rm: 0xf8
@@ -880,7 +880,7 @@ def cm():
 def cpi():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xfe')
-    immediate_operand(IMMEDIATE8)
+    immediate_operand()
 
 
 def register_offset8(register):
@@ -934,7 +934,7 @@ def check_operands(valid):
 
 
 # Should it work with negative operands?
-def immediate_operand(operand_type):
+def immediate_operand(operand_type=IMMEDIATE8):
     """Generate code for an 8-bit or 16-bit immediate operand."""
     global output
 
