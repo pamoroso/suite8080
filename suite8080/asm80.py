@@ -35,7 +35,7 @@ IMMEDIATE16=16
 
 def assemble(lines, outfile):
     """Assemble source and write output to a file."""
-    global source_pass
+    global lineno, source_pass
 
     source_pass = 1
     for lineno, line in enumerate(lines):
