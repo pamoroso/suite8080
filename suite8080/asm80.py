@@ -144,6 +144,8 @@ def process_instruction():
 
     if mnemonic == 'nop':
         nop()
+    elif mnemonic == 'lxi':
+        lxi()
     elif mnemonic == 'stax':
         stax()
     elif mnemonic == 'inx':
@@ -152,6 +154,8 @@ def process_instruction():
         inr()
     elif mnemonic == 'dcr':
         dcr()
+    elif mnemonic == 'mvi':
+        mvi()
     elif mnemonic == 'rlc':
         rlc()
     elif mnemonic == 'dad':
@@ -346,6 +350,15 @@ def nop():
     pass_action(1, b'\x00')
 
 
+# lxi: 0x01 + 16-bit register offset
+def lxi():
+    check_operands(operand1 != '' and operand2 != '')
+    # 0x01 = 1
+    opcode = 1 + register_offset16()
+    pass_action(3, opcode.to_bytes(1, byteorder='little'))
+    immediate_operand(IMMEDIATE16)
+
+
 # We add a special case here rather than changing register_offset16() for just
 # 2 instructions, stax and ldax.
 # stax: 0x02 + 16-bit register offset
@@ -381,6 +394,15 @@ def dcr():
     # 0x05 = 5
     opcode = 5 + (register_offset8(operand1) << 3)
     pass_action(1, opcode.to_bytes(1, byteorder='little'))
+
+
+# mvi: 0x06 + (8-bit register offset << 3)
+def mvi():
+    check_operands(operand1 != '' and operand2 != '')
+    # 0x06 = 6
+    opcode = 6 + (register_offset8(operand1) << 3)
+    pass_action(3, opcode.to_bytes(1, byteorder='little'))
+    immediate_operand()
 
 
 # rlc: 0x07
@@ -938,19 +960,25 @@ def immediate_operand(operand_type=IMMEDIATE8):
     """Generate code for an 8-bit or 16-bit immediate operand."""
     global output
 
-    if operand1[0].isdigit():
-        number = get_number(operand1)
+    if mnemonic == 'lxi' or mnemonic == 'mvi':
+        operand = operand2
+    else:
+        operand = operand1
+
+    if operand[0].isdigit():
+        number = get_number(operand)
     # The operand is a label.
     elif source_pass == 2:
         # Testing for membership seems clearer than using .get() with a default
         # (which complicates parsing valid numeric literals) and accepts also an
         # operand = 0.
-        if operand1 not in symbol_table:
-            report_error(f'undefined label "{operand1}"')
-        number = symbol_table[operand1]
+        if operand not in symbol_table:
+            report_error(f'undefined label "{operand}"')
+        number = symbol_table[operand]
 
     if source_pass == 2:
-        output += number.to_bytes(1, byteorder='little')
+        operand_size = 1 if operand_type == IMMEDIATE8  else 2
+        output += number.to_bytes(operand_size, byteorder='little')
 
 
 # BUG: doesn't work with immediate addresses like ffh; labels aren't added to
