@@ -48,6 +48,11 @@ $ python3 -m asm80 file.asm
 where `file.asm` is an Intel 8080 Assembly source file.
 
 
+## Status
+
+Suite8080 is in early development. When the main components and features are ready, I'll publish it on PyPI and release distribution archives.
+
+
 ## Author
 
 [Paolo Amoroso](https://www.paoloamoroso.com/) developed Suite8080. Email: `info@paoloamoroso.com`
