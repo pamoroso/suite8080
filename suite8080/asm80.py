@@ -37,15 +37,24 @@ def assemble(lines, outfile):
     """Assemble source and write output to a file."""
     global lineno, source_pass
 
+    # The end Assembly directive raises StopIteration, which we catch and do
+    # nothing so that instuction parsing and processing ends and execution can
+    # proceed with the succeeding statements.
     source_pass = 1
-    for lineno, line in enumerate(lines):
-        parse(line)
-        process_instruction()
+    try:
+        for lineno, line in enumerate(lines):
+            parse(line)
+            process_instruction()
+    except StopIteration:
+        pass
 
     source_pass = 2
-    for lineno, line in enumerate(lines):
-        parse(line)
-        process_instruction()
+    try:
+        for lineno, line in enumerate(lines):
+            parse(line)
+            process_instruction()
+    except StopIteration:
+        pass
     
     write_binary_file(outfile)
 
@@ -298,6 +307,12 @@ def process_instruction():
         cm()
     elif mnemonic == 'cpi':
         cpi()
+    elif mnemonic == 'name':
+        name()
+    elif mnemonic == 'title':
+        title()
+    elif mnemonic == 'end':
+        end()
     else:
         report_error(f'unknown mnemonic "{mnemonic}"')
 
@@ -903,6 +918,23 @@ def cpi():
     check_operands(operand1 != '' and operand2 == '')
     pass_action(2, b'\xfe')
     immediate_operand()
+
+
+# DIRECTIVES
+
+# Skipped.
+def name():
+    check_operands(operand1 != '' and (label == operand2 == ''))
+
+
+# Skipped.
+def title():
+    check_operands(operand1 != '' and (label == operand2 == ''))
+
+
+def end():
+    check_operands(label == operand1 == operand2 == '')
+    raise StopIteration
 
 
 def register_offset8(register):
