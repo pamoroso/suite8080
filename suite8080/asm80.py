@@ -307,6 +307,10 @@ def process_instruction():
         cm()
     elif mnemonic == 'cpi':
         cpi()
+    elif mnemonic == 'ds':
+        ds()
+    elif mnemonic == 'dw':
+        dw()
     elif mnemonic == 'end':
         end()
     elif mnemonic == 'name':
@@ -923,6 +927,31 @@ def cpi():
 
 
 # DIRECTIVES
+
+def ds():
+    global address, output
+
+    check_operands(operand1 != '' and operand2 == '')
+    if source_pass == 1:
+        if label != '':
+            add_label()
+        else:
+            # Doesn't work with hex numbers
+            output += bytes(get_number(operand1))
+    # Doesn't work with hex numbers
+    address += get_number(operand1)
+
+
+def dw():
+    global address
+
+    check_operands(operand1 != '' and operand2 == '')
+    if source_pass == 1:
+        if label != '':
+            add_label()
+    address16()
+    address += 2
+
 
 def end():
     check_operands(label == operand1 == operand2 == '')
