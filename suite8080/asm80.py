@@ -307,12 +307,14 @@ def process_instruction():
         cm()
     elif mnemonic == 'cpi':
         cpi()
-    elif mnemonic == 'name':
-        name()
-    elif mnemonic == 'title':
-        title()
     elif mnemonic == 'end':
         end()
+    elif mnemonic == 'name':
+        name()
+    elif mnemonic == 'org':
+        org()
+    elif mnemonic == 'title':
+        title()
     else:
         report_error(f'unknown mnemonic "{mnemonic}"')
 
@@ -922,19 +924,30 @@ def cpi():
 
 # DIRECTIVES
 
+def end():
+    check_operands(label == operand1 == operand2 == '')
+    raise StopIteration
+
+
 # Skipped.
 def name():
     check_operands(operand1 != '' and (label == operand2 == ''))
 
 
+def org():
+    global address
+
+    check_operands(operand1 != '' and (label == operand2 == ''))
+    if operand1[0].isdigit():
+        if source_pass == 1:
+            address = get_number(operand1)
+    else:
+        report_error(f'"org" requires a numeric operand, not "{operand1}"')
+
+
 # Skipped.
 def title():
     check_operands(operand1 != '' and (label == operand2 == ''))
-
-
-def end():
-    check_operands(label == operand1 == operand2 == '')
-    raise StopIteration
 
 
 def register_offset8(register):
