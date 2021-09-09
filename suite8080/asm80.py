@@ -126,12 +126,13 @@ def parse(line):
     # Fixup for the case in which the mnemonic ends up as the first operand (mnemonic = '' and operand1 = 'mnemonic'):
     #
     # label: mnemonic
-    if operand1 and not(mnemonic):
+    if mnemonic == '' and operand1 != '' and operand2 == '':
         mnemonic = operand1.strip().lower()
         operand1 = ''
 
     # This parser is based on the algorithm in this post by Brian Rober Callahan:
     # https://briancallahan.net/blog/20210410.html
+    #
     # Although he mentions a fixup for the case in which the mnemonic and the
     # first operand may both end up in the first operand, I'm not sure my
     # implementation is affected by the same issue the fixup is supposed to address.
