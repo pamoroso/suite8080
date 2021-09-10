@@ -985,7 +985,7 @@ def equ():
 
 
 def dollar(current_address, expression):
-    """Compute value of $-address expression."""
+    """Calculate value of $-address expression."""
     value = current_address
     if len(expression) > 1:
         if expression[1] == '+':

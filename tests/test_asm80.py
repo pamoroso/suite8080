@@ -150,3 +150,22 @@ def test_immediate_operand_decimal():
 ])
 def test_get_number(input, number):
     assert asm80.get_number(input) == number
+
+
+@pytest.mark.parametrize('current_address, expression, value', [
+    (2, '$+2', 4),
+    (2, '$-2', 0),
+    (2, '$*2', 4),
+    (2, '$/2', 1),
+    (2, '$%2', 0),
+    (2, '$+02h', 4),
+])
+def test_dollar(current_address, expression, value):
+    assert asm80.dollar(current_address, expression) == value
+
+
+def test_dollar_invalid_expression(capsys):
+    with pytest.raises(SystemExit):
+        asm80.dollar(0, '$#2')
+        captured = capsys.readouterr()
+        assert 'invalid "equ" expression' in captured.err
