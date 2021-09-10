@@ -80,6 +80,11 @@ def parse(line):
 
     # Remove leading whitespace
     preprocess = line.lstrip()
+    # The order or tabs in the source line may confuse the parses, which scans the
+    # line from a single direction (eg right to left). To work around this I replace
+    # all tabs (HTAB: ASCII 9) with spaces (SPACE: ASCII 32).
+    tab_to_space = {9: 32}
+    preprocess = preprocess.translate(tab_to_space)
 
     # Split comment from the rest of the line.
     #
@@ -105,11 +110,11 @@ def parse(line):
     
     # Split first operand from the remainder
     operand1_l, operand1_sep, operand1_r = operand2_l.rpartition('\t')
-    if operand1_sep:
+    if operand1_sep == '\t':
         operand1 = operand1_r.strip().lower()
     else:
         operand1_l, operand1_sep, operand1_r = operand2_l.rpartition(' ')
-        if operand1_sep:
+        if operand1_sep == ' ':
             operand1 = operand1_r.strip().lower()
         else:
             operand1_l = operand1_r.rstrip()
@@ -314,6 +319,8 @@ def process_instruction():
         dw()
     elif mnemonic == 'end':
         end()
+    elif mnemonic == 'equ':
+        equ()
     elif mnemonic == 'name':
         name()
     elif mnemonic == 'org':
@@ -957,6 +964,44 @@ def dw():
 def end():
     check_operands(label == operand1 == operand2 == '')
     raise StopIteration
+
+
+def equ():
+    global address
+
+    if label == '':
+        report_error(f'missing "equ" label')
+    
+    if operand1[0] == '$':
+        value = dollar(address, operand1)
+    else:
+        value = get_number(operand1)
+    
+    if source_pass == 1:
+        saved = address
+        address = value
+        add_label()
+        address = saved
+
+
+def dollar(current_address, expression):
+    """Compute value of $-address expression."""
+    value = current_address
+    if len(expression) > 1:
+        if expression[1] == '+':
+            value += get_number(expression[2:])
+        elif expression[1] == '-':
+            value -= get_number(expression[2:])
+        elif expression[1] == '*':
+            value *= get_number(expression[2:])
+        elif expression[1] == '/':
+            value /= get_number(expression[2:])
+        elif expression[1] == '%':
+            value %= get_number(expression[2:])
+        else:
+            report_error(f'invalid "equ" expression "{expression}"')
+
+    return int(value)
 
 
 # Skipped.
