@@ -137,8 +137,21 @@ def parse(line):
     else:
         mnemonic_l = mnemonic_r.rstrip().lower()
         mnemonic = mnemonic_l.strip().lower()
-    
-    # Fixup for the case in which the mnemonic ends up as the first operand (mnemonic = '' and operand1 = 'mnemonic'):
+
+
+    # Fixup for the equ directive
+    if db_fix == 0:
+        equ_l, equ_sep, equ_r = comment_l.partition('equ')
+        if equ_sep == 'equ':
+            if label != '' or operand2 != '':
+                report_error(f'invalid "equ" syntax: {operand1}')
+            label = equ_l.strip()
+            mnemonic = equ_sep.strip()
+            operand1 = equ_r.strip()
+
+
+    # Fixup for the case in which the mnemonic ends up as the first operand
+    # (mnemonic = '' and operand1 = 'mnemonic'):
     #
     # label: mnemonic
     if db_fix == 0:
