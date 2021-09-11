@@ -119,6 +119,16 @@ def parse(line):
         else:
             operand1_l = operand1_r.rstrip()
     
+    # Fixup for the case db 'string$'
+    db_fix = 0
+    if (operand1 != '' and (operand1[0] == "'" or operand1[-1] == "'") or
+            (operand2 != '' and (operand2[0] == "'" or operand2[-1] == "'"))):
+        db_split = comment_l.strip()
+        operand1_l, operand1_sep, operand1_r = db_split.partition("'")
+        operand1 = operand1_r[:-1]
+        operand2 = ''
+        db_fix = 1
+
     # Split mnemonic from label
     mnemonic_l, mnemonic_sep, mnemonic_r = operand1_l.rpartition(':')
     if mnemonic_sep:
@@ -131,9 +141,10 @@ def parse(line):
     # Fixup for the case in which the mnemonic ends up as the first operand (mnemonic = '' and operand1 = 'mnemonic'):
     #
     # label: mnemonic
-    if mnemonic == '' and operand1 != '' and operand2 == '':
-        mnemonic = operand1.strip().lower()
-        operand1 = ''
+    if db_fix == 0:
+        if mnemonic == '' and operand1 != '' and operand2 == '':
+            mnemonic = operand1.strip().lower()
+            operand1 = ''
 
     # This parser is based on the algorithm in this post by Brian Rober Callahan:
     # https://briancallahan.net/blog/20210410.html
@@ -313,6 +324,8 @@ def process_instruction():
         cm()
     elif mnemonic == 'cpi':
         cpi()
+    elif mnemonic == 'db':
+        db()
     elif mnemonic == 'ds':
         ds()
     elif mnemonic == 'dw':
@@ -935,6 +948,24 @@ def cpi():
 
 
 # DIRECTIVES
+
+def db():
+    global address, output
+
+    check_operands(operand1 != '' and operand2 == '')
+    if operand1[0].isdigit():
+        value = get_number(operand1)
+        pass_action(1, value.to_bytes(1, byteorder='little'))
+    else:
+        string_length = len(operand1) 
+        if source_pass == 1:
+            if label != '':
+                add_label()
+            address += string_length
+        else:
+            output += bytes(operand1, encoding='utf-8')
+            address += string_length
+
 
 def ds():
     global address, output
