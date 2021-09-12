@@ -277,11 +277,20 @@ program = b''
 
 def disassemble():
     address = 0
+    program_length = len(program)
 
-    while address < len(program):
+    while address < program_length:
         instruction = instructions[program[address]]
         mnemonic = instruction[MNEMONIC]
         size = instruction[SIZE]
+
+        # If there's a data section at the end of a program, some code may be
+        # disassembled as an instruction requiring nonexistent operands referenced
+        # past the end of the program, which causes an ouf of bounds situation. We
+        # silently end the disassembly rather than aborting with an error because
+        # it's a common case and reporting an error may be misleading.
+        if address + size > program_length:
+            break
 
         print(f'{address:04x}\t{mnemonic}', end='')
         if size > 1:

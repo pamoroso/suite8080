@@ -108,7 +108,8 @@ def parse(line):
     else:
         operand2_l = operand2_r.rstrip().lower()
     
-    # Split first operand from the remainder
+    # Split first operand from the remainder. Remove redundant code that checks for
+    # tabs as we replace them with spaces early in the parsing.
     operand1_l, operand1_sep, operand1_r = operand2_l.rpartition('\t')
     if operand1_sep == '\t':
         operand1 = operand1_r.strip().lower()
@@ -970,7 +971,7 @@ def db():
         value = get_number(operand1)
         pass_action(1, value.to_bytes(1, byteorder='little'))
     else:
-        string_length = len(operand1) 
+        string_length = len(operand1)
         if source_pass == 1:
             if label != '':
                 add_label()
