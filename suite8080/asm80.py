@@ -457,7 +457,7 @@ def mvi():
     check_operands(operand1 != '' and operand2 != '')
     # 0x06 = 6
     opcode = 6 + (register_offset8(operand1) << 3)
-    pass_action(3, opcode.to_bytes(1, byteorder='little'))
+    pass_action(2, opcode.to_bytes(1, byteorder='little'))
     immediate_operand()
 
 
