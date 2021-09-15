@@ -110,6 +110,8 @@ def parse(line):
     
     # Split first operand from the remainder. Remove redundant code that checks for
     # tabs as we replace them with spaces early in the parsing.
+    #
+    # Checking for tabs is now obsolete as we convert to spaces early in the parsing.
     operand1_l, operand1_sep, operand1_r = operand2_l.rpartition('\t')
     if operand1_sep == '\t':
         operand1 = operand1_r.strip().lower()
@@ -142,7 +144,7 @@ def parse(line):
 
     # Fixup for the equ directive
     if db_fix == 0:
-        equ_l, equ_sep, equ_r = comment_l.partition('equ')
+        equ_l, equ_sep, equ_r = comment_l.lower().partition('equ')
         if equ_sep == 'equ':
             if label != '' or operand2 != '':
                 report_error(f'invalid "equ" syntax: {operand1}')
