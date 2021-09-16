@@ -1096,11 +1096,11 @@ def register_offset8(register):
 
 def register_offset16():
     """Return encoding of 16-bit register pair."""
-    if operand1 == 'b':
+    if operand1 in ('b', 'bc'):
         return 0  # 0x00
-    elif operand1 == 'd':
+    elif operand1 in ('d', 'de'):
         return 16  # 0x10
-    elif operand1 == 'h':
+    elif operand1 in ('h', 'hl'):
         return 32  # 0x20
     elif operand1 == 'psw':
         if (mnemonic == 'push' or mnemonic == 'pop'):
