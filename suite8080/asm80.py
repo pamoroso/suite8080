@@ -1169,9 +1169,19 @@ def address16():
 def get_number(input):
     """Return value of hex or decimal numeric input string."""
     if input.endswith(('h', 'H')):
-        number = int(input[:-1], 16)
+        base = 16
+    elif input.endswith(('o', 'O')):
+        base = 8
+    elif input.endswith(('b', 'B')):
+        base = 2
+    else:
+        base = 10
+
+    if base != 10:
+        number = int(input[:-1], base)
     else:
         number = int(input)
+
     return number
 
 
