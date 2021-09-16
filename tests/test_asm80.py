@@ -32,6 +32,8 @@ from suite8080 import asm80
     ('jmp loop', ('', 'jmp', 'loop', '', '')),
     # All tokens
     ('label: mov b, a ; Comment', ('label', 'mov', 'b', 'a', 'Comment')),
+    # Tabs
+    ('label:\tmov\tb, a\t; Comment', ('label', 'mov', 'b', 'a', 'Comment')),
     # All tokens separated by tabs
     ('label:\tmov\tb,\ta\t;\tComment', ('label', 'mov', 'b', 'a', 'Comment')),
     # All caps Code
@@ -40,6 +42,18 @@ from suite8080 import asm80
     ('label mov b, a ; Comment', ('', 'label mov', 'b', 'a', 'Comment')),
     # Incorrect syntax: missing comment start character
     ('label: mov b, a Comment', ('label', 'mov', 'b', 'a comment', '')),
+    # Immediate operand
+    ('mvi c, 09h', ('', 'mvi', 'c', '09h', '')),
+    # Label reference
+    ('lxi d, message', ('', 'lxi', 'd', 'message', '')),
+    # org directive
+    ('org 100h', ('', 'org', '100h', '', '')),
+    # end directive
+    ('end', ('', 'end', '', '', '')),
+    # Numeric db
+    ('label: db 5', ('label', 'db', '5', '', '')),
+    # String db
+    ("message: db 'Hello$'", ('message', 'db', 'Hello$', '', '')),
 ])
 def test_parse(source_line, expected):
     assert asm80.parse(source_line) == expected
