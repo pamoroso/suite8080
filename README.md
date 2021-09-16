@@ -22,7 +22,7 @@ See the document `design.md` in the source tree for some design notes.
 
 ## Installation
 
-It will eventually be possible to install Suite8080 from PyPi. In the meantime, download the source code from the [project's site](https://github.com/pamoroso/suite8080) and expand it into a directory.
+Download the source code from the [project's site](https://github.com/pamoroso/suite8080) and expand it into a directory.
 
 
 ## Usage
@@ -46,6 +46,8 @@ To run the assembler execute:
 $ python3 -m asm80 file.asm
 ```
 where `file.asm` is an Intel 8080 Assembly source file.
+
+The `asm` directory of the source tree contains sample Assembly programs that run on CP/M. You can use the Suite8080 tools to process these programs, for example assemble the sources with `asm80` and disassemble them with `dis80`.
 
 
 ## Status
