@@ -2,7 +2,7 @@
 
 import argparse
 
-# Offsets of the fields within the tuple holding an instruction table entry
+# Offsets of the fields within the tuple holding an instruction table entry.
 MNEMONIC = 0
 SIZE = 1
 

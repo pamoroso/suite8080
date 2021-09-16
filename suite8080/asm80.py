@@ -5,16 +5,16 @@ from pathlib import Path
 import sys
 
 
-# Current source line number
+# Current source line number.
 lineno = 0
 
-# Address of current instruction
+# Address of current instruction.
 address = 0
 
-# This is a 2-pass assembler, so keep track of which pass we're in
+# This is a 2-pass assembler, so keep track of which pass we're in.
 source_pass = 1
 
-# Assembled machine code
+# Assembled machine code.
 output = b''
 
 # Tokens
@@ -101,15 +101,14 @@ def parse(line):
         # whitespace as it may interfere with the whitespace we search for later.
         comment_l = comment_r.rstrip()
     
-    # Split second operand from the remainder
+    # Split second operand from the remainder.
     operand2_l, operand2_sep, operand2_r = comment_l.rpartition(',')
     if operand2_sep:
         operand2 = operand2_r.strip().lower()
     else:
         operand2_l = operand2_r.rstrip().lower()
     
-    # Split first operand from the remainder. Remove redundant code that checks for
-    # tabs as we replace them with spaces early in the parsing.
+    # Split first operand from the remainder.
     #
     # Checking for tabs is now obsolete as we convert to spaces early in the parsing.
     operand1_l, operand1_sep, operand1_r = operand2_l.rpartition('\t')
@@ -122,7 +121,7 @@ def parse(line):
         else:
             operand1_l = operand1_r.rstrip()
     
-    # Fixup for the case db 'string$'
+    # Fixup for the case db 'string$'.
     db_fix = 0
     if (operand1 != '' and (operand1[0] == "'" or operand1[-1] == "'") or
             (operand2 != '' and (operand2[0] == "'" or operand2[-1] == "'"))):
@@ -132,7 +131,7 @@ def parse(line):
         operand2 = ''
         db_fix = 1
 
-    # Split mnemonic from label
+    # Split mnemonic from label.
     mnemonic_l, mnemonic_sep, mnemonic_r = operand1_l.rpartition(':')
     if mnemonic_sep:
         mnemonic = mnemonic_r.strip().lower()
@@ -142,7 +141,7 @@ def parse(line):
         mnemonic = mnemonic_l.strip().lower()
 
 
-    # Fixup for the equ directive
+    # Fixup for the equ directive.
     if db_fix == 0:
         equ_l, equ_sep, equ_r = comment_l.lower().partition('equ')
         if equ_sep == 'equ':
@@ -179,7 +178,7 @@ def process_instruction():
     """Check instruction operands and generate code."""
     global label, mnemonic, operand1, operand2, comment
 
-    # Line completely blank or containing only a label and/or comment
+    # Line completely blank or containing only a label and/or comment.
     if mnemonic == operand1 == operand2 == '':
         pass_action(0, b'')
         return
@@ -363,7 +362,7 @@ def process_instruction():
 def report_error(message):
     """Display an error message and exit returning an error code."""
 
-    # List indexes start at 0 but humans count lines starting at 1
+    # List indexes start at 0 but humans count lines starting at 1.
     print(f'asm80> line {lineno + 1}: {message}', file=sys.stderr)
     sys.exit(1)
 
@@ -384,7 +383,7 @@ def pass_action(instruction_size, output_byte):
         # Add new symbol if we have a label
         if label:
             add_label()
-            # Increment address counter by the size of the instruction
+            # Increment address counter by the size of the instruction.
         address += instruction_size
     else:
         # Pass 2. Output the byte representing the opcode. For instructions with
@@ -1134,7 +1133,7 @@ def immediate_operand(operand_type=IMMEDIATE8):
 
     if operand[0].isdigit():
         number = get_number(operand)
-    # The operand is a label.
+    # Label.
     elif source_pass == 2:
         # Testing for membership seems clearer than using .get() with a default
         # (which complicates parsing valid numeric literals) and accepts also an
@@ -1149,7 +1148,7 @@ def immediate_operand(operand_type=IMMEDIATE8):
 
 
 # BUG: doesn't work with immediate addresses like ffh; labels aren't added to
-# symbol table as pass 1 isn't handled
+# symbol table as pass 1 isn't handled.
 def address16():
     """Generate code for 16-bit addresses."""
     global output
