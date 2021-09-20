@@ -1185,8 +1185,13 @@ def get_number(input):
     return number
 
 
-def main(infile):
+def main():
     """Parse the command line and pass the input file to the assembler."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument('filename', type=str, help=' A file name')
+    args = parser.parse_args()
+    infile = Path(args.filename)
+
     with open(infile, 'r') as file:
         lines = [line for line in file]
 
@@ -1195,8 +1200,4 @@ def main(infile):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('filename', type=str, help=' A file name')
-    args = parser.parse_args()
-
-    main(Path(args.filename))
+    main()

@@ -315,8 +315,13 @@ def disassemble():
         address += size
 
 
-def main(filename):
+def main():
     global program
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('filename', type=str, help=' A file name')
+    args = parser.parse_args()
+    filename = args.filename
 
     with open(filename, 'rb') as file:
         program = file.read()
@@ -324,8 +329,4 @@ def main(filename):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('filename', type=str, help=' A file name')
-    args = parser.parse_args()
-
-    main(args.filename)
+    main()
