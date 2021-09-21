@@ -2,7 +2,7 @@
 
 [Suite8080](https://github.com/pamoroso/suite8080) is a suite of Intel 8080 Assembly cross-development tools written in Python.
 
-![Disassembler output](suite8080.jpg)
+![Disassembler output](https://raw.githubusercontent.com/pamoroso/suite8080/master/suite8080.jpg)
 
 The suite comprises the following command-line programs:
 
