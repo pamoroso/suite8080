@@ -59,6 +59,38 @@ def test_parse(source_line, expected):
     assert asm80.parse(source_line) == expected
 
 
+@pytest.mark.parametrize('source_line, expected', [
+    # Not a multiarg db directive
+    ('mov b, c', ('', '', '')),
+    ('lxi d, message', ('', '', '')),
+    ('nop', ('', '', '')),
+    # Multiple decimal args
+    ('label: db 0, 1, 2', ('label', 'db', '0, 1, 2')),
+    # Multiple hex args
+    ('label: db 10h, 20h, 30h', ('label', 'db', '10h, 20h, 30h')),
+    # No label supplied
+    ('db 3, 4, 5', ('', 'db', '3, 4, 5')),
+    # Single arg
+    ('db 1', ('', 'db', '1')),
+])
+def test_parse_db(source_line, expected):
+    assert asm80.parse_db(source_line) == expected
+
+
+def test_parse_db_invalid_label_syntax(capsys):
+    with pytest.raises(SystemExit):
+        asm80.parse_db('label db 1, 2, 3')
+        captured = capsys.readouterr()
+        assert 'invalid label' in captured.err
+
+
+def test_parse_db_invalid_label(capsys):
+    with pytest.raises(SystemExit):
+        asm80.parse_db('3label: db 1, 2, 3')
+        captured = capsys.readouterr()
+        assert 'invalid label' in captured.err
+
+
 def test_report_error(capsys):
     with pytest.raises(SystemExit):
         expected = 'error message'

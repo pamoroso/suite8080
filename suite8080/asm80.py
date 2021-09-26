@@ -171,6 +171,55 @@ def parse(line):
     return label, mnemonic, operand1, operand2, comment
 
 
+def parse_db(line):
+    """Parse db directive.
+
+    Parse the source line to check whether it's a valid db directive. If it is
+    return 'db' as the second value and the arguments as the third. The first
+    value is the label if present, otherwise a null string.
+
+    Assume the source line doesn't contain a comment.
+
+    Parameters
+    ----------
+        line : string
+            Source line
+    
+    Returns
+    -------
+        label
+            Label if present, otherwise ''
+        directive
+            'db' if line contains a valid db directive, otherwise ''
+        arguments
+            Arguments if line contains a db directive, otherwise ''
+    """
+    db_label = db_directive = db_arguments = ''
+
+    # The separator argument of .partition() is case-sensitive.
+    left1, sep1, right1 = line.partition('db')
+    if sep1 == '':
+        left1, sep1, right1 = line.partition('DB')
+    # No db directive found.
+    if sep1 == '':
+        return db_label, db_directive, db_arguments
+
+    db_arguments = right1.strip()
+
+    left2, sep2, _ = left1.partition(':')
+    # Check if the supplied label is alphanumeric and doesn't start with a digit.
+    if sep2 == ':':
+        left2 = left2.strip()
+        if (not left2.isalnum()) or (left2[0].isdigit()):
+            report_error(f'invalid label "{left2}"')
+        db_label = left2
+    # A string not terminated by a colon preceeds the db directive
+    elif sep2 != ':' and left2.strip() != '':
+        report_error(f'invalid label "{left2}"')
+
+    return db_label, 'db', db_arguments
+
+
 # Using a dictionary to similate a switch statement or dispatch on the mnemonic
 # wouldn't save much code or make it more clear, as we need a separate function
 # per mnemonic anyway to check the operands.
