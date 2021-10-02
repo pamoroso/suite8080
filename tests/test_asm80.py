@@ -57,6 +57,20 @@ def test_parse(source_line, expected):
     assert asm80.parse(source_line) == expected
 
 
+@pytest.mark.parametrize('string, result', [
+    ("", False),
+    ("abc", False),
+    ("'abc'", True),
+    ("abc'", False),
+    ("'abc", False),
+    ("' a b c '", True),
+    ("' a ' b ''", True),
+    ("' a ' b", False),
+])
+def test_is_quote_delimited(string, result):
+    assert asm80.is_quote_delimited(string) == result
+
+
 @pytest.mark.parametrize('source_line, expected', [
     # Not a multiarg db directive
     ('mov b, c', ('', '', '')),

@@ -173,6 +173,15 @@ def parse(line):
     return label, mnemonic, operand1, operand2, comment
 
 
+def is_quote_delimited(string):
+    """Return True if string is enclosed between quote characters."""
+    stripped = string.strip()
+    if stripped.startswith("'") and stripped.endswith("'"):
+        return True
+    else:
+        return False
+
+
 def parse_db(line):
     """Parse db directive.
 
