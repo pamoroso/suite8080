@@ -215,7 +215,7 @@ def test_immediate_operand_decimal():
     ('0ah', 10),
     ('10H', 16),
     ('00001111B', 15),
-    ('10o', 8),
+    ('10q', 8),
 ])
 def test_get_number(input, number):
     assert asm80.get_number(input) == number
