@@ -104,20 +104,20 @@ def parse(line):
     # Split second operand from the remainder.
     operand2_l, operand2_sep, operand2_r = comment_l.rpartition(',')
     if operand2_sep:
-        operand2 = operand2_r.strip().lower()
+        operand2 = operand2_r.strip()
     else:
-        operand2_l = operand2_r.rstrip().lower()
+        operand2_l = operand2_r.rstrip()
     
     # Split first operand from the remainder.
     #
     # Checking for tabs is now obsolete as we convert to spaces early in the parsing.
     operand1_l, operand1_sep, operand1_r = operand2_l.rpartition('\t')
     if operand1_sep == '\t':
-        operand1 = operand1_r.strip().lower()
+        operand1 = operand1_r.strip()
     else:
         operand1_l, operand1_sep, operand1_r = operand2_l.rpartition(' ')
         if operand1_sep == ' ':
-            operand1 = operand1_r.strip().lower()
+            operand1 = operand1_r.strip()
         else:
             operand1_l = operand1_r.rstrip()
     
@@ -134,11 +134,11 @@ def parse(line):
     # Split mnemonic from label.
     mnemonic_l, mnemonic_sep, mnemonic_r = operand1_l.rpartition(':')
     if mnemonic_sep:
-        mnemonic = mnemonic_r.strip().lower()
-        label = mnemonic_l.strip().lower()
+        mnemonic = mnemonic_r.strip()
+        label = mnemonic_l.strip()
     else:
-        mnemonic_l = mnemonic_r.rstrip().lower()
-        mnemonic = mnemonic_l.strip().lower()
+        mnemonic_l = mnemonic_r.rstrip()
+        mnemonic = mnemonic_l.strip()
 
 
     # Fixup for the equ directive.
@@ -158,7 +158,7 @@ def parse(line):
     # label: mnemonic
     if db_fix == 0:
         if mnemonic == '' and operand1 != '' and operand2 == '':
-            mnemonic = operand1.strip().lower()
+            mnemonic = operand1.strip()
             operand1 = ''
 
     # This parser is based on the algorithm in this post by Brian Rober Callahan:
@@ -168,6 +168,8 @@ def parse(line):
     # first operand may both end up in the first operand, I'm not sure my
     # implementation is affected by the same issue the fixup is supposed to address.
 
+    label = label.lower()
+    mnemonic = mnemonic.lower()
     return label, mnemonic, operand1, operand2, comment
 
 
@@ -1120,8 +1122,9 @@ def title():
     check_operands(operand1 != '' and (label == operand2 == ''))
 
 
-def register_offset8(register):
+def register_offset8(raw_register):
     """Return encoding of 8-bit register."""
+    register = raw_register.lower()
     if register == 'b':
         return 0
     elif register == 'c':
@@ -1144,13 +1147,13 @@ def register_offset8(register):
 
 def register_offset16():
     """Return encoding of 16-bit register pair."""
-    if operand1 in ('b', 'bc'):
+    if operand1 in ('b', 'B', 'bc', 'BC'):
         return 0  # 0x00
-    elif operand1 in ('d', 'de'):
+    elif operand1 in ('d', 'D', 'de', 'DE'):
         return 16  # 0x10
-    elif operand1 in ('h', 'hl'):
+    elif operand1 in ('h', 'H', 'hl', 'HL'):
         return 32  # 0x20
-    elif operand1 == 'psw':
+    elif operand1 in ('psw', 'PSW'):
         if (mnemonic == 'push' or mnemonic == 'pop'):
             return 48  # 0x30
         else:

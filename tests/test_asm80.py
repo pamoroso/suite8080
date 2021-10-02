@@ -36,12 +36,10 @@ from suite8080 import asm80
     ('label:\tmov\tb, a\t; Comment', ('label', 'mov', 'b', 'a', 'Comment')),
     # All tokens separated by tabs
     ('label:\tmov\tb,\ta\t;\tComment', ('label', 'mov', 'b', 'a', 'Comment')),
-    # All caps Code
-    ('LABEL: MOV B, A ; Comment', ('label', 'mov', 'b', 'a', 'Comment')),
     # Incorrect syntax: missing label terminator
-    ('label mov b, a ; Comment', ('', 'label mov', 'b', 'a', 'Comment')),
+    ('label mov b, a', ('', 'label mov', 'b', 'a', '')),
     # Incorrect syntax: missing comment start character
-    ('label: mov b, a Comment', ('label', 'mov', 'b', 'a comment', '')),
+    ('label: mov b, a comment', ('label', 'mov', 'b', 'a comment', '')),
     # Immediate operand
     ('mvi c, 09h', ('', 'mvi', 'c', '09h', '')),
     # Label reference
