@@ -144,13 +144,21 @@ def test_mov_b_c():
 
 @pytest.mark.parametrize('register, opcode', [
     ('b', 0),
+    ('B', 0),
     ('c', 1),
+    ('C', 1),
     ('d', 2),
+    ('D', 2),
     ('e', 3),
+    ('E', 3),
     ('h', 4),
+    ('H', 4),
     ('l', 5),
+    ('L', 5),
     ('m', 6),
+    ('M', 6),
     ('a', 7),
+    ('A', 7),
 ])
 def test_register_offset8(register, opcode):
     assert asm80.register_offset8(register) == opcode
