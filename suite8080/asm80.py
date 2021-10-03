@@ -100,7 +100,15 @@ def parse(line):
         # the argument string as the remainder to parse. Also strip trailing
         # whitespace as it may interfere with the whitespace we search for later.
         comment_l = comment_r.rstrip()
-    
+
+    # db directive?
+    db_label, directive, arguments = parse_db(comment_l)
+    if directive == 'db':
+        label = db_label
+        mnemonic = directive
+        operand1 = arguments
+        return label, mnemonic, operand1, operand2, comment
+
     # Split second operand from the remainder.
     operand2_l, operand2_sep, operand2_r = comment_l.rpartition(',')
     if operand2_sep:
@@ -121,16 +129,9 @@ def parse(line):
         else:
             operand1_l = operand1_r.rstrip()
     
-    # Fixup for the case db 'string$'.
+    # Fixup for the case db 'string$'. No longer necessary because the db directive
+    # is now parsed separately.
     db_fix = 0
-    if (operand1 != '' and (operand1[0] == "'" or operand1[-1] == "'") or
-            (operand2 != '' and (operand2[0] == "'" or operand2[-1] == "'"))):
-        db_split = comment_l.strip()
-        # Remove enclosing quote characters
-        operand1_l, operand1_sep, operand1_r = db_split.partition("'")
-        operand1 = operand1_r[:-1]
-        operand2 = ''
-        db_fix = 1
 
     # Split mnemonic from label.
     mnemonic_l, mnemonic_sep, mnemonic_r = operand1_l.rpartition(':')
@@ -200,7 +201,7 @@ def parse_db(line):
     Returns
     -------
         label
-            Label if present, otherwise ''
+            Lowercase label if present, otherwise ''
         directive
             'db' if line contains a valid db directive, otherwise ''
         arguments
@@ -229,7 +230,7 @@ def parse_db(line):
     elif sep2 != ':' and left2.strip() != '':
         report_error(f'invalid label "{left2}"')
 
-    return db_label, 'db', db_arguments
+    return db_label.lower(), 'db', db_arguments
 
 
 # Using a dictionary to similate a switch statement or dispatch on the mnemonic
@@ -1029,17 +1030,24 @@ def db():
     global address, output
 
     check_operands(operand1 != '' and operand2 == '')
+    # Numeric literal.
     if operand1[0].isdigit():
         value = get_number(operand1)
         pass_action(1, value.to_bytes(1, byteorder='little'))
+    # Character constant, e.g. 'Z'.
+    elif len(operand1) == 3 and is_quote_delimited(operand1):
+        value = ord(operand1[1])
+        pass_action(1, value.to_bytes(1, byteorder='little'))
+    # String.
     else:
-        string_length = len(operand1)
+        string_length = len(operand1) - 2  # Account for enclosing ' characters
         if source_pass == 1:
             if label != '':
                 add_label()
             address += string_length
         else:
-            output += bytes(operand1, encoding='utf-8')
+            # Strip enclosing ' characters when adding to output.
+            output += bytes(operand1[1:-1], encoding='utf-8')
             address += string_length
 
 
@@ -1196,6 +1204,9 @@ def immediate_operand(operand_type=IMMEDIATE8):
     # Numeric literal.
     if operand[0].isdigit():
         number = get_number(operand)
+    # Character constant, e.g. 'Z'.
+    elif operand_type == IMMEDIATE8 and len(operand) == 3 and is_quote_delimited(operand):
+        number = ord(operand[1])
     # Label.
     elif source_pass == 2:
         # Testing for membership seems clearer than using .get() with a default

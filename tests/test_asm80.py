@@ -51,7 +51,7 @@ from suite8080 import asm80
     # Numeric db
     ('label: db 5', ('label', 'db', '5', '', '')),
     # String db
-    ("message: db 'Hello$'", ('message', 'db', 'Hello$', '', '')),
+    ("message: db 'Hello$'", ('message', 'db', "'Hello$'", '', '')),
 ])
 def test_parse(source_line, expected):
     assert asm80.parse(source_line) == expected
