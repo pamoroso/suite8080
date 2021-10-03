@@ -126,6 +126,7 @@ def parse(line):
     if (operand1 != '' and (operand1[0] == "'" or operand1[-1] == "'") or
             (operand2 != '' and (operand2[0] == "'" or operand2[-1] == "'"))):
         db_split = comment_l.strip()
+        # Remove enclosing quote characters
         operand1_l, operand1_sep, operand1_r = db_split.partition("'")
         operand1 = operand1_r[:-1]
         operand2 = ''
@@ -1192,6 +1193,7 @@ def immediate_operand(operand_type=IMMEDIATE8):
     else:
         operand = operand1
 
+    # Numeric literal.
     if operand[0].isdigit():
         number = get_number(operand)
     # Label.
