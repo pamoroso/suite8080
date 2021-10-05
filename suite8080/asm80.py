@@ -178,10 +178,7 @@ def parse(line):
 def is_quote_delimited(string):
     """Return True if string is enclosed between quote characters."""
     stripped = string.strip()
-    if stripped.startswith("'") and stripped.endswith("'"):
-        return True
-    else:
-        return False
+    return stripped.startswith("'") and stripped.endswith("'")
 
 
 def parse_db(line):
