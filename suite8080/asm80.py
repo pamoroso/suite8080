@@ -168,12 +168,6 @@ def parse(line):
     return label, mnemonic, operand1, operand2, comment
 
 
-def is_quote_delimited(string):
-    """Return True if string is enclosed between quote characters."""
-    stripped = string.strip()
-    return stripped.startswith("'") and stripped.endswith("'")
-
-
 def parse_db(line):
     """Parse db directive.
 
@@ -1039,6 +1033,21 @@ def db():
             # Strip enclosing ' characters when adding to output.
             output += bytes(operand1[1:-1], encoding='utf-8')
             address += string_length
+
+
+def is_char_constant(string):
+    """Return True if string is a character constant.
+
+    A character constant is a quote-delimited string containing only one character
+    such as 'Z' or '*'.
+    """
+    return len(string) == 3 and is_quote_delimited(string)
+
+
+def is_quote_delimited(string):
+    """Return True if string is enclosed between quote characters."""
+    stripped = string.strip()
+    return stripped.startswith("'") and stripped.endswith("'")
 
 
 def ds():

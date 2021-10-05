@@ -60,6 +60,19 @@ def test_parse(source_line, expected):
 @pytest.mark.parametrize('string, result', [
     ("", False),
     ("abc", False),
+    ("''", False),
+    ("'A", False),
+    ("'A'", True),
+    ("'*'", True),
+    ("'#'", True),
+])
+def test_is_char_constant(string, result):
+    assert asm80.is_char_constant(string) == result
+
+
+@pytest.mark.parametrize('string, result', [
+    ("", False),
+    ("abc", False),
     ("'abc'", True),
     ("abc'", False),
     ("'abc", False),
