@@ -128,10 +128,6 @@ def parse(line):
             operand1 = operand1_r.strip()
         else:
             operand1_l = operand1_r.rstrip()
-    
-    # Fixup for the case db 'string$'. No longer necessary because the db directive
-    # is now parsed separately.
-    db_fix = 0
 
     # Split mnemonic from label.
     mnemonic_l, mnemonic_sep, mnemonic_r = operand1_l.rpartition(':')
@@ -142,26 +138,23 @@ def parse(line):
         mnemonic_l = mnemonic_r.rstrip()
         mnemonic = mnemonic_l.strip()
 
-
     # Fixup for the equ directive.
-    if db_fix == 0:
-        equ_l, equ_sep, equ_r = comment_l.lower().partition('equ')
-        if equ_sep == 'equ':
-            if label != '' or operand2 != '':
-                report_error(f'invalid "equ" syntax: {operand1}')
-            label = equ_l.strip()
-            mnemonic = equ_sep.strip()
-            operand1 = equ_r.strip()
+    equ_l, equ_sep, equ_r = comment_l.lower().partition('equ')
+    if equ_sep == 'equ':
+        if label != '' or operand2 != '':
+            report_error(f'invalid "equ" syntax: {operand1}')
+        label = equ_l.strip()
+        mnemonic = equ_sep.strip()
+        operand1 = equ_r.strip()
 
 
     # Fixup for the case in which the mnemonic ends up as the first operand
     # (mnemonic = '' and operand1 = 'mnemonic'):
     #
     # label: mnemonic
-    if db_fix == 0:
-        if mnemonic == '' and operand1 != '' and operand2 == '':
-            mnemonic = operand1.strip()
-            operand1 = ''
+    if mnemonic == '' and operand1 != '' and operand2 == '':
+        mnemonic = operand1.strip()
+        operand1 = ''
 
     # This parser is based on the algorithm in this post by Brian Rober Callahan:
     # https://briancallahan.net/blog/20210410.html
