@@ -1204,7 +1204,7 @@ def immediate_operand(operand_type=IMMEDIATE8):
     if operand[0].isdigit():
         number = get_number(operand)
     # Character constant, e.g. 'Z'.
-    elif operand_type == IMMEDIATE8 and len(operand) == 3 and is_quote_delimited(operand):
+    elif operand_type == IMMEDIATE8 and is_char_constant(operand):
         number = ord(operand[1])
     # Label.
     elif source_pass == 2:
