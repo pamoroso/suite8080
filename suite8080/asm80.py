@@ -1050,6 +1050,17 @@ def is_quote_delimited(string):
     return stripped.startswith("'") and stripped.endswith("'")
 
 
+def parse_db_arguments(string):
+    """Return a list of db arguments parsed from string.
+    
+    Split string into arguments, strip whitespace from them, and return a list of
+    the resulting arguments.
+    """
+    arguments = string.split(',')
+    arguments = [argument.strip() for argument in arguments]
+    return arguments
+
+
 def ds():
     global address, output
 
