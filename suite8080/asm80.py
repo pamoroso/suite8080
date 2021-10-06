@@ -1019,12 +1019,12 @@ def db():
         value = get_number(operand1)
         pass_action(1, value.to_bytes(1, byteorder='little'))
     # Character constant, e.g. 'Z'.
-    elif len(operand1) == 3 and is_quote_delimited(operand1):
+    elif is_char_constant(operand1):
         value = ord(operand1[1])
         pass_action(1, value.to_bytes(1, byteorder='little'))
     # String.
     else:
-        string_length = len(operand1) - 2  # Account for enclosing ' characters
+        string_length = len(operand1) - 2  # Account for enclosing ' pair
         if source_pass == 1:
             if label != '':
                 add_label()
