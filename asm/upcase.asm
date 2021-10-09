@@ -17,10 +17,10 @@ loop:       mvi     a, 0
             mov     a, d
             mov     b, m                ; B holds current character in string
             cmp     b                   ; < a?
-            jnc     skip                ; Yes, so skip to next character
+            jnc     skip                ; Yes, skip to next character
             mov     a, e
             cmp     b                   ; > z? 
-            jc      skip                ; Yes, so skip to next character
+            jc      skip                ; Yes, skip to next character
             mov     a, b
             sui     offset              ; Subtract offset to get uppercase
             mov     m, a
