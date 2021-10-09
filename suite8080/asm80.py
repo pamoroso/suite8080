@@ -1014,25 +1014,39 @@ def db():
     global address, output
 
     check_operands(operand1 != '' and operand2 == '')
-    # Numeric literal.
-    if operand1[0].isdigit():
-        value = get_number(operand1)
-        pass_action(1, value.to_bytes(1, byteorder='little'))
-    # Character constant, e.g. 'Z'.
-    elif is_char_constant(operand1):
-        value = ord(operand1[1])
-        pass_action(1, value.to_bytes(1, byteorder='little'))
-    # String.
-    else:
-        string_length = len(operand1) - 2  # Account for enclosing ' pair
-        if source_pass == 1:
-            if label != '':
-                add_label()
-            address += string_length
+
+    arguments = parse_db_arguments(operand1)
+    for argument in arguments:
+        # Numeric literal.
+        if argument[0].isdigit():
+            value = get_number(argument)
+            pass_action(1, value.to_bytes(1, byteorder='little'))
+        # Character constant, e.g. 'Z'.
+        elif is_char_constant(argument):
+            value = ord(argument[1])
+            pass_action(1, value.to_bytes(1, byteorder='little'))
+        # String, e.g. 'string'
         else:
-            # Strip enclosing ' characters when adding to output.
-            output += bytes(operand1[1:-1], encoding='utf-8')
-            address += string_length
+            string_length = len(argument) - 2  # Account for enclosing ' pair
+            if source_pass == 1:
+                if label != '':
+                    add_label()
+                address += string_length
+            else:
+                # Strip enclosing ' characters when adding to output.
+                output += bytes(argument[1:-1], encoding='utf-8')
+                address += string_length
+
+
+def parse_db_arguments(string):
+    """Return a list of db arguments parsed from string.
+    
+    Split string into arguments, strip whitespace from them, and return a list of
+    the resulting arguments.
+    """
+    arguments = string.split(',')
+    arguments = [argument.strip() for argument in arguments]
+    return arguments
 
 
 def is_char_constant(string):
@@ -1048,17 +1062,6 @@ def is_quote_delimited(string):
     """Return True if string is enclosed between quote characters."""
     stripped = string.strip()
     return stripped.startswith("'") and stripped.endswith("'")
-
-
-def parse_db_arguments(string):
-    """Return a list of db arguments parsed from string.
-    
-    Split string into arguments, strip whitespace from them, and return a list of
-    the resulting arguments.
-    """
-    arguments = string.split(',')
-    arguments = [argument.strip() for argument in arguments]
-    return arguments
 
 
 def ds():
