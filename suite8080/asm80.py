@@ -413,7 +413,7 @@ def report_error(message):
     sys.exit(1)
 
 
-def pass_action(instruction_size, output_byte):
+def pass_action(instruction_size, output_byte, should_add_label=True):
     """Build symbol table in pass 1, generate code in pass 2.
     
     Parameters
@@ -421,13 +421,16 @@ def pass_action(instruction_size, output_byte):
         instruction_size : int
             Number of bytes of the instruction
         output_byte : bytes
-            Opcode, b'' if no output should be generated. 
+            Opcode, b'' if no output should be generated.
+        should_add_label : Boolean
+            True if the label, when present, should be added
     """
     global address, output
 
     if source_pass == 1:
-        # Add new symbol if we have a label
-        if label:
+        # Add new symbol if we have a label, unless should_add_label tells not to
+        # in order to prevent duplicate label errors with multiargument db.
+        if label and should_add_label:
             add_label()
             # Increment address counter by the size of the instruction.
         address += instruction_size
@@ -1012,6 +1015,7 @@ def cpi():
 
 def db():
     global address, output
+    should_add_label = True
 
     check_operands(operand1 != '' and operand2 == '')
 
@@ -1020,17 +1024,24 @@ def db():
         # Numeric literal.
         if argument[0].isdigit():
             value = get_number(argument)
-            pass_action(1, value.to_bytes(1, byteorder='little'))
+            pass_action(1, value.to_bytes(1, byteorder='little'),
+                        label != '' and should_add_label)
+            # If we add a label, prevent it from being added again when multiple
+            # arguments are present.
+            should_add_label = False
         # Character constant, e.g. 'Z'.
         elif is_char_constant(argument):
             value = ord(argument[1])
-            pass_action(1, value.to_bytes(1, byteorder='little'))
+            pass_action(1, value.to_bytes(1, byteorder='little'),
+                        label != '' and should_add_label)
+            should_add_label = False
         # String, e.g. 'string'
         else:
             string_length = len(argument) - 2  # Account for enclosing ' pair
             if source_pass == 1:
-                if label != '':
+                if label != '' and should_add_label:
                     add_label()
+                    should_add_label = False
                 address += string_length
             else:
                 # Strip enclosing ' characters when adding to output.
