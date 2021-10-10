@@ -139,7 +139,7 @@ def parse(line):
         mnemonic = mnemonic_l.strip()
 
     # Fixup for the equ directive.
-    equ_l, equ_sep, equ_r = comment_l.lower().partition('equ')
+    equ_l, equ_sep, equ_r = comment_l.partition('equ')
     if equ_sep == 'equ':
         if label != '' or operand2 != '':
             report_error(f'invalid "equ" syntax: {operand1}')
@@ -1120,8 +1120,13 @@ def equ():
     if label == '':
         report_error(f'missing "equ" label')
     
-    if operand1[0] == '$':
+    # Expression, e.g $+3 or $*2.
+    if operand1.startswith('$'):
         value = dollar(address, operand1)
+    # Character constant, e.g. 'Z'
+    elif is_char_constant(operand1):
+        value = ord(operand1[1])
+    # Number.
     else:
         value = get_number(operand1)
     
