@@ -1036,7 +1036,7 @@ def db():
                         label != '' and should_add_label)
             should_add_label = False
         # String, e.g. 'string'
-        else:
+        elif is_quote_delimited(argument):
             string_length = len(argument) - 2  # Account for enclosing ' pair
             if source_pass == 1:
                 if label != '' and should_add_label:
@@ -1047,6 +1047,15 @@ def db():
                 # Strip enclosing ' characters when adding to output.
                 output += bytes(argument[1:-1], encoding='utf-8')
                 address += string_length
+        # Label.
+        else:
+            if source_pass == 2:
+                if argument not in symbol_table:
+                    report_error(f'undefined label "{argument}"')
+                value = symbol_table[argument]
+                value_size = 1 if (0 <= value <= 255) else 2
+                output += value.to_bytes(value_size, byteorder='little')
+                address += value_size
 
 
 def parse_db_arguments(string):
