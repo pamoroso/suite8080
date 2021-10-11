@@ -7,7 +7,7 @@ README = (HERE / 'README.md').read_text()
 
 setup(
     name='suite8080',
-    version='0.1.0',
+    version='0.2.0',
     description='Suite of Intel 8080 Assembly tools',
     long_description=README,
     long_description_content_type='text/markdown',
