@@ -1300,14 +1300,15 @@ def get_number(input):
 def main():
     """Parse the command line and pass the input file to the assembler."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('filename', type=str, help=' A file name')
+    parser.add_argument('filename', help='input file')
+    parser.add_argument('-o', '--outfile', help='output file')
     args = parser.parse_args()
     infile = Path(args.filename)
 
     with open(infile, 'r') as file:
         lines = [line for line in file]
 
-    outfile = Path(infile.stem + '.com')
+    outfile = args.outfile if args.outfile else Path(infile.stem + '.com')
     assemble(lines, outfile)
 
 
