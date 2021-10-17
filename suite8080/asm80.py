@@ -1306,7 +1306,7 @@ def main():
     infile = Path(args.filename)
 
     with open(infile, 'r') as file:
-        lines = [line for line in file]
+        lines = file.readlines()
 
     outfile = args.outfile if args.outfile else Path(infile.stem + '.com')
     assemble(lines, outfile)
