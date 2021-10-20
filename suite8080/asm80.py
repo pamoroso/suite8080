@@ -33,6 +33,10 @@ IMMEDIATE8=8
 IMMEDIATE16=16
 
 
+# Default output file name
+OUTFILE = 'program.com'
+
+
 def assemble(lines, outfile):
     """Assemble source and write output to a file."""
     global lineno, source_pass
@@ -1300,15 +1304,22 @@ def get_number(input):
 def main():
     """Parse the command line and pass the input file to the assembler."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('filename', help='input file')
+    parser.add_argument('filename', default='-', help="input file, stdin if '-'")
     parser.add_argument('-o', '--outfile', help='output file')
     args = parser.parse_args()
-    infile = Path(args.filename)
 
-    with open(infile, 'r') as file:
-        lines = file.readlines()
+    if args.filename == '-':
+        lines = sys.stdin.readlines()
+    else:
+        infile = Path(args.filename)
+        with open(infile, 'r') as file:
+            lines = file.readlines()
 
-    outfile = args.outfile if args.outfile else Path(infile.stem + '.com')
+    if args.filename == '-':
+        outfile = args.outfile if args.outfile else OUTFILE
+    else:
+        outfile = Path(infile.stem + '.com')
+
     assemble(lines, outfile)
 
 
