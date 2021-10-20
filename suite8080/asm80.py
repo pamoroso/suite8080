@@ -1306,6 +1306,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('filename', default='-', help="input file, stdin if '-'")
     parser.add_argument('-o', '--outfile', help='output file')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='increase output verbosity')
     args = parser.parse_args()
 
     if args.filename == '-':
@@ -1321,6 +1323,8 @@ def main():
         outfile = Path(infile.stem + '.com')
 
     assemble(lines, outfile)
+    if args.verbose:
+        print(f'Wrote {len(output)} bytes')
 
 
 if __name__ == '__main__':
