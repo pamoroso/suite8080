@@ -1305,7 +1305,8 @@ def main():
     """Parse the command line and pass the input file to the assembler."""
     parser = argparse.ArgumentParser()
     parser.add_argument('filename', default='-', help="input file, stdin if '-'")
-    parser.add_argument('-o', '--outfile', help='output file')
+    parser.add_argument('-o', '--outfile',
+                        help=f'output file, {OUTFILE} if input is - and -o not supplied')
     parser.add_argument('-v', '--verbose', action='store_true',
                         help='increase output verbosity')
     args = parser.parse_args()
