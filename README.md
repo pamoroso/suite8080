@@ -4,12 +4,10 @@
 
 ![Disassembler output](https://raw.githubusercontent.com/pamoroso/suite8080/master/suite8080.jpg)
 
-The suite comprises the following command-line programs:
+The suite comprises the following command-line programs and more will come:
 
-* `ar80`: object library archiver (not available yet)
 * `asm80`: assembler
 * `dis80`: disassembler
-* `ln80`: linker (not available yet)
 
 This project is inspired by [a series of blog posts](https://briancallahan.net/blog/20210407.html) by Brian Robert Callahan on demystifying programs that create programs. See the `docs` directory in the source tree for some design and usage notes.
 
