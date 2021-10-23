@@ -9,7 +9,7 @@ The suite comprises the following command-line programs and more will come:
 * `asm80`: assembler
 * `dis80`: disassembler
 
-This project is inspired by [a series of blog posts](https://briancallahan.net/blog/20210407.html) by Brian Robert Callahan on demystifying programs that create programs. See the `docs` directory in the source tree for some design and usage notes.
+This project is inspired by [a series of blog posts](https://briancallahan.net/blog/20210407.html) by Brian Robert Callahan on demystifying programs that create programs. See the [`docs`](https://github.com/pamoroso/suite8080/tree/master/docs) directory in the source tree for some design and usage notes.
 
 The executable files generated and processed by the tools are supposed to run on any Intel 8080 system such as CP/M computers, both actual devices and emulated ones.
 
@@ -67,7 +67,7 @@ where `file.com` is an executable Intel 8080 program.
 
 ## Sample programs
 
-The `asm` directory of the source tree contains sample Assembly programs, some of which run on CP/M and others on a bare Intel 8080 system with no host environment. You can use the Suite8080 tools to process these programs, for example assemble the sources with `asm80` and disassemble the executables with `dis80`.
+The [`asm`](https://github.com/pamoroso/suite8080/tree/master/asm) directory of the source tree contains sample Assembly programs, some of which run on CP/M and others on a bare Intel 8080 system with no host environment. You can use the Suite8080 tools to process these programs, for example assemble the sources with `asm80` and disassemble the executables with `dis80`.
 
 
 ## Status
