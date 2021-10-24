@@ -9,7 +9,7 @@ The suite comprises the following command-line programs and more will come:
 * `asm80`: assembler
 * `dis80`: disassembler
 
-This project is inspired by [a series of blog posts](https://briancallahan.net/blog/20210407.html) by Brian Robert Callahan on demystifying programs that create programs. See the [`docs`](https://github.com/pamoroso/suite8080/tree/master/docs) directory in the source tree for some design and usage notes.
+This project is inspired by [a series of blog posts](https://briancallahan.net/blog/20210407.html) by Brian Robert Callahan on demystifying programs that create programs. See the [`docs`](https://github.com/pamoroso/suite8080/tree/master/docs) directory in the source tree for some [design](https://github.com/pamoroso/suite8080/blob/master/docs/design.md) and [usage](https://github.com/pamoroso/suite8080/blob/master/docs/usage.md) notes.
 
 The executable files generated and processed by the tools are supposed to run on any Intel 8080 system such as CP/M computers, both actual devices and emulated ones.
 
