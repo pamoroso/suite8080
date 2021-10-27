@@ -3,7 +3,7 @@
 import argparse
 from pathlib import Path
 import sys
-from suite8080.__init__ import __version__
+from suite8080 import __version__
 
 
 # Current source line number.

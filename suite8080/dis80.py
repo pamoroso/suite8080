@@ -1,7 +1,7 @@
 """An Intel 8080 disassembler."""
 
 import argparse
-from suite8080.__init__ import __version__
+from suite8080 import __version__
 
 # Offsets of the fields within the tuple holding an instruction table entry.
 MNEMONIC = 0
