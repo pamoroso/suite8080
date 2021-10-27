@@ -3,7 +3,6 @@
 import argparse
 from pathlib import Path
 import sys
-from suite8080 import __version__
 
 
 # Current source line number.
@@ -1304,7 +1303,7 @@ def get_number(input):
 
 def main():
     """Parse the command line and pass the input file to the assembler."""
-    asm80_description = f'Intel 8080 assembler, Suite8080 v{__version__}'
+    asm80_description = f'Intel 8080 assembler / Suite8080'
     parser = argparse.ArgumentParser(description=asm80_description)
     parser.add_argument('filename', default='-', help="input file, stdin if '-'")
     parser.add_argument('-o', '--outfile',

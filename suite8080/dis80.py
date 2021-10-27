@@ -1,7 +1,6 @@
 """An Intel 8080 disassembler."""
 
 import argparse
-from suite8080 import __version__
 
 # Offsets of the fields within the tuple holding an instruction table entry.
 MNEMONIC = 0
@@ -318,7 +317,7 @@ def disassemble():
 
 def main():
     global program
-    dis80_description = f'Intel 8080 disassembler, Suite8080 v{__version__}'
+    dis80_description = f'Intel 8080 disassembler / Suite8080'
 
     parser = argparse.ArgumentParser(description=dis80_description)
     parser.add_argument('filename', type=str, help=' A file name')
