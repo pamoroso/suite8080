@@ -40,6 +40,8 @@ Although the 8080 mnemonics and directives accept from zero to two arguments, th
 [label:] [db [argument1[, ..., argumentN]]] [; comment]
 ```
 
+Two-letter abbreviations of register pairs are valid along with single-letter ones. In other words, the assembler, for example, accepts both `d` and `de` as the name of the register pair consisting of the `d` and `e` registers.
+
 Character constants such as `'C'` or `'*'` can be immediate operands of Assembly instructions, as well as arguments of the `db` and `equ` directives.
 
 
