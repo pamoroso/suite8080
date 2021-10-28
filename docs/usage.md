@@ -28,7 +28,7 @@ Although no input file name extension is enforced, and any is accepted or may be
 
 ### Assembly syntax
 
-`asm80` recognizes most of the Assembly language of traditional Intel 8080 assemblers, except for macros. A source line has the syntax:
+Except for macros, `asm80` recognizes most of the Assembly language of early Intel 8080 assemblers such as the ones by Intel and Microsoft. A source line has the syntax:
 
 ```
 [label:] [mnemonic [operand1[, operand2]]] [; comment]
