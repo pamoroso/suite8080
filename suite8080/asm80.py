@@ -226,9 +226,8 @@ def parse_db(line):
 # per mnemonic anyway to check the operands.
 def process_instruction():
     """Check instruction operands and generate code."""
-    global label, mnemonic, operand1, operand2, comment
+    #global label, mnemonic, operand1, operand2, comment
 
-    # Line completely blank or containing only a label and/or comment.
     if mnemonic == operand1 == operand2 == '':
         pass_action(0, b'')
         return
