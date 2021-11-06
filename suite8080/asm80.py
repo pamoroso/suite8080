@@ -1082,9 +1082,10 @@ def is_char_constant(string):
 
 
 def is_quote_delimited(string):
-    """Return True if string is enclosed between quote characters."""
+    """Return True if string is enclosed between single or double quotes."""
     stripped = string.strip()
-    return stripped.startswith("'") and stripped.endswith("'")
+    return ((stripped.startswith("'") and stripped.endswith("'")) or
+            (stripped.startswith('"') and stripped.endswith('"')))
 
 
 def ds():

@@ -65,11 +65,11 @@ where `$` is the current address, `OP` an operator, `number` a number, and no sp
 No other expressions are supported.
 
 
-### Strings
+### Strings and character constants
 
-Strings are enclosed within single quote characters, e.g. `'This is a string'`, and must not contain single quotes. Therefore, `'I'm a string'` is not allowed.
+Strings are sequences of characters enclosed within single `'` or double `"` quotes, such as `'This is a string'`. Strings delimited by single quotes may contain double quotes, and vice versa, as in `"I'm a string"` or `'This is a "string"'`.
 
-Character constants (also known as ASCII constants) are strings containing only one character.
+Character constants, also known as ASCII constants, are strings containing only one character. For example, `'F'`, `"b"`, and `'*'` are character constants.
 
 
 ### Macros

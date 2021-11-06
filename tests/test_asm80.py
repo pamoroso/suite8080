@@ -79,6 +79,13 @@ def test_is_char_constant(string, result):
     ("' a b c '", True),
     ("' a ' b ''", True),
     ("' a ' b", False),
+    ('"abc"', True),
+    ('abc"', False),
+    ('"abc', False),
+    ('" a b c "', True),
+    ('" a " b "', True),
+    ('" a " b', False),
+    ("\"a 'b' c\"", True),
 ])
 def test_is_quote_delimited(string, result):
     assert asm80.is_quote_delimited(string) == result
