@@ -37,8 +37,8 @@ IMMEDIATE16=16
 OUTFILE = 'program'
 
 
-def assemble(lines, outfile):
-    """Assemble source and write output to a file."""
+def assemble(lines):
+    """Assemble source lines."""
     global lineno, source_pass
 
     # The end Assembly directive raises StopIteration, which we catch and do
@@ -59,14 +59,6 @@ def assemble(lines, outfile):
             process_instruction()
     except StopIteration:
         pass
-    
-    write_binary_file(outfile)
-
-
-def write_binary_file(filename):
-    """Write machine code output to a binary file."""
-    with open(filename, 'wb') as file:
-        file.write(output)
 
 
 # A source line has the following syntax:
@@ -1324,9 +1316,18 @@ def main():
     else:
         outfile = Path(infile.stem + '.com')
 
-    assemble(lines, outfile)
+    assemble(lines)
+    bytes_written = write_binary_file(outfile, output)
+
     if args.verbose:
-        print(f'Wrote {len(output)} bytes')
+        print(f'Wrote {bytes_written} bytes')
+
+
+def write_binary_file(filename, binary_data):
+    """Write binary_data to filename and return number of bytes written."""
+    with open(filename, 'wb') as file:
+        file.write(binary_data)
+    return len(binary_data)
 
 
 if __name__ == '__main__':
