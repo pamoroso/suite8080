@@ -34,7 +34,7 @@ IMMEDIATE16=16
 
 
 # Default output file name
-OUTFILE = 'program.com'
+OUTFILE = 'program'
 
 
 def assemble(lines, outfile):
@@ -1320,7 +1320,7 @@ def main():
             lines = file.readlines()
 
     if args.filename == '-':
-        outfile = args.outfile if args.outfile else OUTFILE
+        outfile = args.outfile if args.outfile else OUTFILE + '.com'
     else:
         outfile = Path(infile.stem + '.com')
 
