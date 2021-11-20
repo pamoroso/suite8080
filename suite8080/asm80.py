@@ -1351,7 +1351,7 @@ def write_symbol_table(table, filename):
     The table is written to a text file in the CP/M .sym file format."""
     with open(filename, 'w', encoding='utf-8') as file:
         for symbol in table:
-            print(f'{symbol[:16]} {table[symbol]}', file=file)
+            print(f'{table[symbol]:04X} {symbol[:16].upper()}', file=file)
 
     return len(table)
 

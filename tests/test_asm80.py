@@ -288,11 +288,11 @@ def test_write_symbol_table_symbol_present(tmp_path):
     symbol_file = dir / 'symbols.sym'
     asm80.write_symbol_table(symbol_table, symbol_file)
     symbols = symbol_file.read_text()
-    assert 'symbol3 3' in symbols
+    assert '0003 SYMBOL3' in symbols
 
 
 def test_write_symbol_table_long_symbol(tmp_path):
-    symbol_table = {'symbol1': 1,
+    symbol_table = {'symbol11': 1,
                     'thisisaverylongsymbol': 2,
                     'symbol3': 3}
     dir = tmp_path / 'sub'
@@ -302,4 +302,4 @@ def test_write_symbol_table_long_symbol(tmp_path):
     symbols = symbol_file.read_text()
     # Symbols are truncated to 16 characters when saving to the symbol table, so
     # the full symbol 'thisisaverylongsymbol' should be missing from symbols.
-    assert not('thisisaverylongsymbol' in symbols)
+    assert not('THISISAVERYLONGSYMBOL' in symbols)
