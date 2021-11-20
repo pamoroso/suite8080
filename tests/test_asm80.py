@@ -269,3 +269,37 @@ def test_dollar_invalid_expression(capsys):
         asm80.dollar(0, '$#2')
         captured = capsys.readouterr()
         assert 'invalid "equ" expression' in captured.err
+
+
+def test_write_symbol_table_count(tmp_path):
+    symbol_table = {'symbol1': 1, 'symbol2': 2, 'symbol3': 3}
+    dir = tmp_path / 'sub'
+    dir.mkdir()
+    symbol_file = dir / 'symbols.sym'
+    symbol_count = 3
+    count = asm80.write_symbol_table(symbol_table, symbol_file)
+    assert count == symbol_count
+
+
+def test_write_symbol_table_symbol_present(tmp_path):
+    symbol_table = {'symbol1': 1, 'symbol2': 2, 'symbol3': 3}
+    dir = tmp_path / 'sub'
+    dir.mkdir()
+    symbol_file = dir / 'symbols.sym'
+    asm80.write_symbol_table(symbol_table, symbol_file)
+    symbols = symbol_file.read_text()
+    assert 'symbol3 3' in symbols
+
+
+def test_write_symbol_table_long_symbol(tmp_path):
+    symbol_table = {'symbol1': 1,
+                    'thisisaverylongsymbol': 2,
+                    'symbol3': 3}
+    dir = tmp_path / 'sub'
+    dir.mkdir()
+    symbol_file = dir / 'symbols.sym'
+    asm80.write_symbol_table(symbol_table, symbol_file)
+    symbols = symbol_file.read_text()
+    # Symbols are truncated to 16 characters when saving to the symbol table, so
+    # the full symbol 'thisisaverylongsymbol' should be missing from symbols.
+    assert not('thisisaverylongsymbol' in symbols)

@@ -1299,7 +1299,9 @@ def main():
     parser = argparse.ArgumentParser(description=asm80_description)
     parser.add_argument('filename', default='-', help="input file, stdin if '-'")
     parser.add_argument('-o', '--outfile',
-                        help=f'output file, {OUTFILE} if input is - and -o not supplied')
+                        help=f'output file, {OUTFILE + ".com"} if input is - and -o not supplied')
+    parser.add_argument('-s', '--symtab', action='store_true',
+                        help='save symbol table')
     parser.add_argument('-v', '--verbose', action='store_true',
                         help='increase output verbosity')
     args = parser.parse_args()
@@ -1313,14 +1315,23 @@ def main():
 
     if args.filename == '-':
         outfile = args.outfile if args.outfile else OUTFILE + '.com'
+        symfile = Path(args.outfile).stem + '.sym' if args.outfile else OUTFILE + '.sym'
+    elif args.outfile:
+        outfile = Path(args.outfile)
+        symfile = Path(args.outfile).stem + '.sym'
     else:
         outfile = Path(infile.stem + '.com')
+        symfile = Path(infile.stem + '.sym')
 
     assemble(lines)
     bytes_written = write_binary_file(outfile, output)
+    if args.symtab:
+        symbol_count = write_symbol_table(symbol_table, symfile)
 
     if args.verbose:
-        print(f'Wrote {bytes_written} bytes')
+        print(f'{bytes_written} bytes written')
+        if args.symtab:
+            print(f'{symbol_count} symbols written')
 
 
 def write_binary_file(filename, binary_data):
@@ -1328,6 +1339,21 @@ def write_binary_file(filename, binary_data):
     with open(filename, 'wb') as file:
         file.write(binary_data)
     return len(binary_data)
+
+
+# The symbol table is saved in the .sym CP/M file format described in section
+# "1.1 SID Startup" on page 1 of "SID Users Guide" by Digital Research:
+# http://www.cpm.z80.de/randyfiles/DRI/SID_ZSID.pdf
+
+def write_symbol_table(table, filename):
+    """Save symbol table to filename and return the number of symbols written.
+    
+    The table is written to a text file in the CP/M .sym file format."""
+    with open(filename, 'w', encoding='utf-8') as file:
+        for symbol in table:
+            print(f'{symbol[:16]} {table[symbol]}', file=file)
+
+    return len(table)
 
 
 if __name__ == '__main__':

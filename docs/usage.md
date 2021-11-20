@@ -21,9 +21,12 @@ All arguments are optional except for the input file `filename`, which may be `-
 
 * `-h`, `--help`: prints a help message and exits
 * `-o`, `--outfile`: output file name, which defaults to `program.com` if the input file is `-` and `-o` is not supplied
+* `-s`, `--symtab`: saves the symbol table to a file with the name of the input file and the `.sym` extension; the argument of `-o` and the `.sym` extension; or `program.sym` if the input file is `-` and `-o` is not supplied
 * `-v`, `--verbose`: increases output verbosity
 
 Although no input file name extension is enforced, and any is accepted or may be skipped altogether, I recommend `.asm` or `.a80` for Assembly source files and `.m4` for `m4` macro files.
+
+The symbol table is saved in the `.sym` CP/M file format described in section 1.1 "SID Startup" on page 1 of the [*SID Users Guide*](http://www.cpm.z80.de/randyfiles/DRI/SID_ZSID.pdf) manual published by Digital Research.
 
 
 ### Assembly syntax
