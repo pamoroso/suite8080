@@ -1342,7 +1342,7 @@ def write_binary_file(filename, binary_data):
 
 
 # The symbol table is saved in the .sym CP/M file format described in section
-# "1.1 SID Startup" on page 1 of "SID Users Guide" by Digital Research:
+# "1.1 SID Startup" on page 4 of "SID Users Guide" by Digital Research:
 # http://www.cpm.z80.de/randyfiles/DRI/SID_ZSID.pdf
 
 def write_symbol_table(table, filename):

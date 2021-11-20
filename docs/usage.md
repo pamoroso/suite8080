@@ -26,7 +26,7 @@ All arguments are optional except for the input file `filename`, which may be `-
 
 Although no input file name extension is enforced, and any is accepted or may be skipped altogether, I recommend `.asm` or `.a80` for Assembly source files and `.m4` for `m4` macro files.
 
-The symbol table is saved in the `.sym` CP/M file format described in section 1.1 "SID Startup" on page 1 of the [*SID Users Guide*](http://www.cpm.z80.de/randyfiles/DRI/SID_ZSID.pdf) manual published by Digital Research.
+The symbol table is saved in the `.sym` CP/M file format described in section 1.1 "SID Startup" on page 4 of the [*SID Users Guide*](http://www.cpm.z80.de/randyfiles/DRI/SID_ZSID.pdf) manual published by Digital Research.
 
 
 ### Assembly syntax
