@@ -132,7 +132,8 @@ dmypy.json
 poetry.lock
 pyproject.toml
 
-# Intel 8080 executable or object files
+# Intel 8080 executable, object, or symbol table files
 **/*.com
 **/*.exe
 **/*.obj
+**/*.sym
