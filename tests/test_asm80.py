@@ -281,6 +281,12 @@ def test_write_symbol_table_count(tmp_path):
     assert count == symbol_count
 
 
+def test_write_symbol_table_empty_table():
+    symbol_table = {}
+    count = asm80.write_symbol_table(symbol_table, 'symbols.sym')
+    assert count == 0
+
+
 def test_write_symbol_table_symbol_present(tmp_path):
     symbol_table = {'symbol1': 1, 'symbol2': 2, 'symbol3': 3}
     dir = tmp_path / 'sub'

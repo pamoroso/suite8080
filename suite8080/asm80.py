@@ -1348,12 +1348,17 @@ def write_binary_file(filename, binary_data):
 def write_symbol_table(table, filename):
     """Save symbol table to filename and return the number of symbols written.
     
-    The table is written to a text file in the CP/M .sym file format."""
+    The table is written to a text file in the CP/M .sym file format. No file
+    is created if the table is empty."""
+    symbol_count = len(table)
+    if symbol_count == 0:
+        return symbol_count
+
     with open(filename, 'w', encoding='utf-8') as file:
         for symbol in table:
             print(f'{table[symbol]:04X} {symbol[:16].upper()}', file=file)
 
-    return len(table)
+    return symbol_count
 
 
 if __name__ == '__main__':
