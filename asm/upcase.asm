@@ -1,10 +1,19 @@
-; Uppercase a string. Runs on a bare system with no host environment.
+; Uppercase a string.
+;
+; The program runs on CP/M but you need a debugger like DDT or SID to inspect the
+; process and the machine state. From SID start the program with this command,
+; which runs it until the breakpoint at address 'done':
+;
+; g,.done
+
 
 lowera      equ     61h                 ; ASCII lowercase a
 lowerz      equ     7ah                 ; ASCII lowercase z
 offset      equ     32                  ; lowercase-uppercase offset
 len         equ     17                  ; String length
 
+
+            org     100h
 
             lxi     h, string
             mvi     c, len
@@ -28,7 +37,9 @@ skip:       inx     h
             dcr     c
             jmp     loop
 
-done:       hlt
+done:       ret
+
 
 string:     db      'Mixed Case String'
+
             end
