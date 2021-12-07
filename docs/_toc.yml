@@ -1,0 +1,6 @@
+format: jb-book
+root: intro
+chapters:
+- file: usage
+- file: design
+- file: reference

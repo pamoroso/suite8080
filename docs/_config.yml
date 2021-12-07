@@ -1,0 +1,13 @@
+title: "A Read The Docs Publishing Test"
+author: Paolo Amoroso
+logo: "suite8080logo.png"
+
+repository:
+  url: https://github.com/pamoroso/suite8080
+html:
+  use_repository_button: true
+
+sphinx:
+  extra_extensions:
+  - 'sphinx.ext.autodoc'
+  - 'sphinx.ext.napoleon'

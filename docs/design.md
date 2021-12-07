@@ -1,4 +1,4 @@
-# Suite8080 Design Notes
+# Design notes
 
 [Suite8080](https://github.com/pamoroso/suite8080) is a suite of Intel 8080 Assembly cross-development tools. See the `README.md` file in the source tree for an overview of what the system does and how to use it.
 
