@@ -167,8 +167,9 @@ def parse(line):
 def parse_db(line):
     """Parse db directive.
 
-    Parse the source line to check whether it's a valid db directive. If it is
-    return 'db' as the second value and the arguments as the third. The first value is the label if present, otherwise a null string.
+    Parse the source line to check whether it's a valid ``db`` directive. If it is
+    return ``'db'`` as the second value and the arguments as the third. The first
+    value is the label if present, otherwise a null string.
 
     Assume the source line doesn't contain a comment.
 
@@ -1045,7 +1046,7 @@ def db():
 
 
 def parse_db_arguments(string):
-    """Return a list of db arguments parsed from string.
+    """Return a list of ``db`` arguments parsed from string.
     
     Split string into arguments, strip whitespace from them, and return a list of
     the resulting arguments.
@@ -1125,7 +1126,7 @@ def equ():
 
 
 def dollar(current_address, expression):
-    """Calculate value of $-address expression."""
+    """Calculate value of ``$``-address expression."""
     value = current_address
     if len(expression) > 1:
         if expression[1] == '+':
@@ -1326,7 +1327,7 @@ def main():
 
 
 def write_binary_file(filename, binary_data):
-    """Write binary_data to filename and return number of bytes written."""
+    """Write ``binary_data`` to filename and return number of bytes written."""
     with open(filename, 'wb') as file:
         file.write(binary_data)
     return len(binary_data)
@@ -1339,7 +1340,7 @@ def write_binary_file(filename, binary_data):
 def write_symbol_table(table, filename):
     """Save symbol table to filename and return the number of symbols written.
     
-    The table is written to a text file in the CP/M .sym file format. No file
+    The table is written to a text file in the CP/M ``.sym`` file format. No file
     is created if the table is empty."""
     symbol_count = len(table)
     if symbol_count == 0:
