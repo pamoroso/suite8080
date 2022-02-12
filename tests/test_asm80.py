@@ -22,6 +22,9 @@ from suite8080 import asm80
     ('label:', ('label', '', '', '', '')),
     # Only mnemonic
     ('nop', ('', 'nop', '', '', '')),
+    # equ
+    ('label equ 1', ('label', 'equ', '1', '', '')),
+    ('label EQU 1', ('label', 'equ', '1', '', '')),
     # One operand
     ('xra a', ('', 'xra', 'a', '', '')),
     # Two operands
@@ -50,8 +53,12 @@ from suite8080 import asm80
     ('end', ('', 'end', '', '', '')),
     # Numeric db
     ('label: db 5', ('label', 'db', '5', '', '')),
+    ('label: DB 5', ('label', 'db', '5', '', '')),
     # String db
     ("message: db 'Hello$'", ('message', 'db', "'Hello$'", '', '')),
+    ("message: DB 'Hello$'", ('message', 'db', "'Hello$'", '', '')),
+    # All uppercase
+    ('LABEL: MOV A, B', ('label', 'mov', 'A', 'B', ''))
 ])
 def test_parse(source_line, expected):
     assert asm80.parse(source_line) == expected

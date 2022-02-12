@@ -100,7 +100,7 @@ def parse(line):
     # db directive?
     db_label, directive, arguments = parse_db(comment_l)
     if directive == 'db':
-        label = db_label
+        label = db_label.lower()
         mnemonic = directive
         operand1 = arguments
         return label, mnemonic, operand1, operand2, comment
@@ -135,7 +135,11 @@ def parse(line):
         mnemonic = mnemonic_l.strip()
 
     # Fixup for the equ directive.
-    equ_l, equ_sep, equ_r = comment_l.partition('equ')
+    equ_l, equ_sep, equ_r = comment_l.partition('EQU')
+    if equ_sep == '':
+        equ_l, equ_sep, equ_r = comment_l.partition('equ')
+    else:
+        equ_sep = equ_sep.lower()
     if equ_sep == 'equ':
         if label != '' or operand2 != '':
             report_error(f'invalid "equ" syntax: {operand1}')
@@ -457,12 +461,13 @@ def lxi():
 # stax: 0x02 + 16-bit register offset
 def stax():
     check_operands(operand1 != '' and operand2 == '')
-    if operand1 == 'b':
+    operand = operand1.lower()
+    if operand == 'b':
         pass_action(1, b'\x02')
-    elif operand1 == 'd':
+    elif operand == 'd':
         pass_action(1, b'\x12')
     else:
-        report_error(f'"stax" only takes "b" or "d", not "{operand1}"')
+        report_error(f'"stax" only takes "b" or "d", not "{operand}"')
 
 
 # inx: 0x03
@@ -1238,7 +1243,10 @@ def immediate_operand(operand_type=IMMEDIATE8):
         # Testing for membership seems clearer than using .get() with a default
         # (which complicates parsing valid numeric literals) and accepts also an
         # operand = 0.
+        operand = operand.lower()
         if operand not in symbol_table:
+            # BUG: If operand is mixed case in the source file the error message
+            # prints the normalized uppercase version, not the original one.
             report_error(f'undefined label "{operand}"')
         number = symbol_table[operand]
 
@@ -1258,7 +1266,7 @@ def address16():
     else:
         # Valid addresses are non-negative, so a negative address is an appropriate
         # default for a label not in the symbol table.
-        number = symbol_table.get(operand1, -1)
+        number = symbol_table.get(operand1.lower(), -1)
         if source_pass == 2 and number < 0:
             report_error(f'undefined label "{operand1}"')
 

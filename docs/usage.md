@@ -106,9 +106,9 @@ The programs `asm80` assembles can run on actual Intel 8080 or Z80 machines, suc
 
 ### Limitations and issues
 
-The Assembly language syntax is currently not fully case-insensitive, so it's better to use only lowercase labels, mnemonics, operands, and directives. Most notably, `equ` can't be written in all uppercase or a combination of lowercase and uppercase.
-
 The assembler is in early development and, although it performs basic syntax checking, there's little or no input validation.
+
+Syntactic elements such as labels and mnemonics can be all lowercase (e.g. `equ`) or all uppercase (e.g. `EQU`), but not in mixed case like `Equ`. The assembler may accept some mixed case elements, but it's safer to stick with all lowercase or all uppercase.
 
 In addition, strings must not contain comma `,` characters. As a workaround, break the string into parts not containing commas and insert the comma code (2C hex) at the appropriate place. Here's an example of allocating the string `I, robot`:
 
