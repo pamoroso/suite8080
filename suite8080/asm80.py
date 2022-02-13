@@ -1240,13 +1240,11 @@ def immediate_operand(operand_type=IMMEDIATE8):
         number = ord(operand[1])
     # Label.
     elif source_pass == 2:
+        operand = operand.lower()
         # Testing for membership seems clearer than using .get() with a default
         # (which complicates parsing valid numeric literals) and accepts also an
         # operand = 0.
-        operand = operand.lower()
         if operand not in symbol_table:
-            # BUG: If operand is mixed case in the source file the error message
-            # prints the normalized uppercase version, not the original one.
             report_error(f'undefined label "{operand}"')
         number = symbol_table[operand]
 
