@@ -52,9 +52,9 @@ Character constants such as `'C'` or `'*'` can be immediate operands of Assembly
 
 ### Numbers
 
-Numbers may be decimal, hexadecimal, or octal. Hexadecimal numbers must end with `h` (for example `1dh`), octal ones with `q` (e.g. `31q`). Hexadecimal numbers beginning with the digits `a` to `f` must be prefixed with `0`, such as `0bh`.
+Only non-negative integers are accepted.
 
-Only integer numbers are accepted.
+Numbers may be decimal, hexadecimal, or octal. Hexadecimal numbers must end with `h` (for example `1dh`), octal ones with `q` (e.g. `31q`). Hexadecimal numbers beginning with the digits `a` to `f` must be prefixed with `0`, such as `0bh`.
 
 
 ### Expressions
@@ -115,6 +115,8 @@ In addition, strings must not contain comma `,` characters. As a workaround, bre
 ```
 robot:  db  'I', 2ch, ' robot'
 ```
+
+The assembler accepts only non-negative integers. A workaround is to enter negative numbers as 2's complement unsigned integers, e.g. `255` or `0ffh` instead of `-1`.
 
 
 ## Disassembler
