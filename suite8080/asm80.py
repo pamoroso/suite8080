@@ -436,9 +436,10 @@ def add_label():
     """Add a label to the symbol table."""
     global symbol_table
 
-    if label in symbol_table:
+    symbol = label.lower()
+    if symbol in symbol_table:
         report_error(f'duplicate label: "{label}"')
-    symbol_table[label] = address
+    symbol_table[symbol] = address
 
 
 # nop: 0x00
@@ -1042,9 +1043,10 @@ def db():
         # Label.
         else:
             if source_pass == 2:
-                if argument not in symbol_table:
+                symbol = argument.lower()
+                if symbol not in symbol_table:
                     report_error(f'undefined label "{argument}"')
-                value = symbol_table[argument]
+                value = symbol_table[symbol]
                 value_size = 1 if (0 <= value <= 255) else 2
                 output += value.to_bytes(value_size, byteorder='little')
                 address += value_size

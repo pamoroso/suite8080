@@ -170,6 +170,15 @@ def test_add_label_new():
     assert asm80.symbol_table[asm80.label] == expected
 
 
+@mock.patch('suite8080.asm80.label', 'LABEL')
+@mock.patch('suite8080.asm80.address', 10)
+@mock.patch('suite8080.asm80.symbol_table', {})
+def test_add_uppercase_label():
+    expected = asm80.address
+    asm80.add_label()
+    assert asm80.symbol_table[asm80.label.lower()] == expected
+
+
 @mock.patch('suite8080.asm80.label', 'label')
 @mock.patch('suite8080.asm80.address', 10)
 @mock.patch('suite8080.asm80.symbol_table', {'label': 10})
