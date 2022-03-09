@@ -1164,8 +1164,16 @@ def org():
     if operand1[0].isdigit():
         if source_pass == 1:
             address = get_number(operand1)
+    # Label, which must be definied before use.
+    elif operand1[0].isalpha():
+        if source_pass == 1:
+            value = symbol_table.get(operand1.lower(), -1)
+            if value:
+                address = value
+            else:
+                report_error(f'invalid "org" address "{value}')
     else:
-        report_error(f'"org" requires a numeric operand, not "{operand1}"')
+        report_error(f'invalid "org" operand "{operand1}"')
 
 
 # Skipped.
