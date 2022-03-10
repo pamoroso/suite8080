@@ -1164,7 +1164,7 @@ def org():
     if operand1[0].isdigit():
         if source_pass == 1:
             address = get_number(operand1)
-    # Label, which must be definied before use.
+    # Label, which must be defined before use.
     elif operand1[0].isalpha():
         if source_pass == 1:
             value = symbol_table.get(operand1.lower(), -1)
