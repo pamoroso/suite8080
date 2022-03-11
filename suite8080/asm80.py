@@ -1087,9 +1087,7 @@ def ds():
         if label != '':
             add_label()
     elif source_pass == 2:
-        # Doesn't work with hex numbers
         output += bytes(get_number(operand1))
-    # BUG: Doesn't work with hex numbers; address is incrmented twice, once per pass.
     address += get_number(operand1)
 
 
