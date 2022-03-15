@@ -1086,9 +1086,14 @@ def ds():
     if source_pass == 1:
         if label != '':
             add_label()
-    elif source_pass == 2:
-        output += bytes(get_number(operand1))
-    address += get_number(operand1)
+    storage_size = get_number(operand1) if operand1[0].isdigit() \
+                                        else symbol_table.get(operand1.lower(), -1)
+    # Label must be defined before use.
+    if storage_size < 1:
+        report_error(f'invalid "ds" operand or forward reference')
+    if source_pass == 2:
+        output += bytes(storage_size)
+    address += storage_size
 
 
 def dw():
