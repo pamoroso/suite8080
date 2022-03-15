@@ -108,7 +108,13 @@ The programs `asm80` assembles can run on actual Intel 8080 or Z80 machines, suc
 
 The assembler is in early development and, although it performs basic syntax checking, there's little or no input validation.
 
-Syntactic elements such as labels and mnemonics can be all lowercase (e.g. `equ`) or all uppercase (e.g. `EQU`), but not in mixed case like `Equ`. The assembler may accept some mixed case elements, but it's safer to stick with all lowercase or all uppercase.
+
+#### Identifiers
+
+Identifiers such as labels and mnemonics can be all lowercase (e.g. `equ`) or all uppercase (e.g. `EQU`), but not in mixed case like `Equ`. The assembler may accept some mixed case elements, but it's safer to stick with all lowercase or all uppercase.
+
+
+#### Strings
 
 In addition, strings must not contain comma `,` characters. As a workaround, break the string into parts not containing commas and insert the comma code (2C hex) at the appropriate place. Here's an example of allocating the string `I, robot`:
 
@@ -116,7 +122,15 @@ In addition, strings must not contain comma `,` characters. As a workaround, bre
 robot:  db  'I', 2ch, ' robot'
 ```
 
+
+#### Numbers
+
 The assembler accepts only non-negative integers. A workaround is to enter negative numbers as 2's complement unsigned integers, e.g. `255` or `0ffh` instead of `-1`.
+
+
+#### Directives
+
+The labels used as operands of `org` or `ds` must be defined before use. No forward references are allowed.
 
 
 ## Disassembler
