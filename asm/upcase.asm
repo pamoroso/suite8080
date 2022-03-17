@@ -7,18 +7,19 @@
 ; g,.done
 
 
-lowera      equ     61h                 ; ASCII lowercase a
-lowerz      equ     7ah                 ; ASCII lowercase z
-offset      equ     32                  ; lowercase-uppercase offset
-len         equ     17                  ; String length
+TPA         equ     100h
+LOWERA      equ     61h                 ; ASCII lowercase a
+LOWERZ      equ     7ah                 ; ASCII lowercase z
+OFFSET      equ     32                  ; lowercase-uppercase offset
+LEN         equ     17                  ; String length
 
 
-            org     100h
+            org     TPA
 
             lxi     h, string
-            mvi     c, len
-            mvi     d, lowera
-            mvi     e, lowerz
+            mvi     c, LEN
+            mvi     d, LOWERA
+            mvi     e, LOWERZ
 
 loop:       mvi     a, 0
             cmp     c                   ; c == 0?
@@ -31,7 +32,7 @@ loop:       mvi     a, 0
             cmp     b                   ; > z? 
             jc      skip                ; Yes, skip to next character
             mov     a, b
-            sui     offset              ; Subtract offset to get uppercase
+            sui     OFFSET              ; Subtract offset to get uppercase
             mov     m, a
 skip:       inx     h
             dcr     c

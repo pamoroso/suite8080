@@ -7,15 +7,15 @@
 ; g,.done
 
 
+TPA         equ     100h
+LEN         equ     10                  ; Block length
+
+
             org     100h
-
-
-len         equ     10                  ; Block length
-
 
             lxi     h, source           ; Source block
             lxi     d, dest             ; Destination
-            mvi     c, len              ; Length counter
+            mvi     c, LEN              ; Length counter
 
 loop:       xra     a                   ; Clear a
             cmp     c                   ; c == 0?
