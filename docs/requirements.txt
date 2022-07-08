@@ -1,1 +1,1 @@
-https://github.com/executablebooks/jupyter-book/archive/refs/heads/master.zip
+jupyter-book==0.13.0
