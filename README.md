@@ -87,6 +87,13 @@ See the [list of releases](https://github.com/pamoroso/suite8080/releases) for n
 [Paolo Amoroso](https://www.paoloamoroso.com/) developed Suite8080. Email: `info@paoloamoroso.com`
 
 
+## Contributing
+
+Suite8080 is a personal learning project. I like devising solutions to problems, designing and implementing new features, and planning the evolution of the system. This is part of the learning journey, as well as fun.
+
+So, although you're welcome to modify the code and I appreciate your work, I may not merge your changes or implement the features you suggest.
+
+
 ## License
 
 This code is distributed under the MIT license, see the `LICENSE` file.
